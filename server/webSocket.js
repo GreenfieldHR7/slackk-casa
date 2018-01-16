@@ -20,7 +20,7 @@ const response = (code, message, method, data) =>
     data,
   });
 
-// sends data to all cients except client ws
+// sends data to all clients except client ws
 const updateEveryoneElse = (ws, wss, data) => {
   wss.clients.forEach((client) => {
     if (client !== ws && client.readyState === WebSocket.OPEN) {
