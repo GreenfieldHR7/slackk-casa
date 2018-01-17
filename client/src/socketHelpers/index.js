@@ -54,6 +54,7 @@ const sendMessage = (data) => {
   oneup.play();
   sent = true;
   ws.send(JSON.stringify(msg));
+  getUsersInChannel(data.workspaceId);  // updates users select options
 };
 
 // takes a workspace Id as INT for parameter and returns the messages for that current workspace
@@ -106,7 +107,7 @@ const afterConnect = () => {
         setUsers(serverResp.data);
         break;
       case 'POSTMESSAGE':
-        addNewMessage(serverResp.data);
+        addNewMessage(serverResp.data);        
         break;
       case 'GETMESSAGESOFUSER':
         loadMessages(serverResp.data);
