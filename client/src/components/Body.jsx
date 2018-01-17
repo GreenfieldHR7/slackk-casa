@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import MessageList from './MessageList.jsx';
 import WorkSpaceList from './WorkSpaceList.jsx';
+import UserList from './UserList.jsx';
 import PropTypes from 'prop-types';
 
 //container for other containers
@@ -15,13 +16,15 @@ export default class Body extends React.Component {
     let {
       workSpaces,
       messages,
+      usernames,
       loadWorkSpaces,
       changeCurrentWorkSpace,
       currentWorkSpaceId,
+      handleSelectedUser,
     } = this.props;
     return (
       <Container fluid>
-        <Row>
+       <Row>
           <Col className="side-bar-col" xs="2">
             <WorkSpaceList
               workSpaces={workSpaces}
@@ -31,7 +34,10 @@ export default class Body extends React.Component {
             />
           </Col>
           <Col className="message-list-col" xs="10">
-            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId} />
+            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId}/>
+          </Col>
+          <Col>
+            <UserList usernames={usernames} handleSelectedUser={handleSelectedUser}/>
           </Col>
         </Row>
       </Container>
