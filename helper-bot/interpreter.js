@@ -1,4 +1,9 @@
-//const tasks = require('./tasks');
+const responder = require('./responder.js');
+
+const news = require('./tasks/news.js');
+const notes = require('./tasks/notes.js');
+const reminders = require('./tasks/reminders.js');
+
 
 const interpreter = (text, username, workspaceId) => {
   let words = text.split(' ');
@@ -7,8 +12,8 @@ const interpreter = (text, username, workspaceId) => {
   if (text.indexOf('remind') > -1) {
   	let task = undefined;
   	let taskIndex = undefined;
-  	let timeToRemind = undefined;
-  	let timeToRemindIndex = undefined;
+  	let time = undefined;
+  	let timeIndex = undefined;
 
   	words.forEach((word, index) => {
   	  let lowerCaseWord = word.toLowerCase();
@@ -18,19 +23,17 @@ const interpreter = (text, username, workspaceId) => {
   	  }
 
 	  if (lowerCaseWord === 'tomorrow' || lowerCaseWord === 'next' || lowerCaseWord === 'later' || lowerCaseWord === 'in' || lowerCaseWord === 'on') {
-  	  	if (timeToRemindIndex === undefined) {
-  	  	  timeToRemindIndex = index;	
+  	  	if (timeIndex === undefined) {
+  	  	  timeIndex = index;	
   	  	}
   	  }  	  
   	});
 
-  	if (taskIndex && timeToRemindIndex) {
-  	  task = words.slice(taskIndex + 1, timeToRemindIndex).join(' ');
-  	  timeToRemind = words.slice(timeToRemindIndex).join(' ');
+  	if (taskIndex && timeIndex) {
+  	  task = words.slice(taskIndex + 1, timeIndex).join(' ');
+  	  time = words.slice(timeIndex).join(' ');
 	  
-      //invoke tasks.reminder(task, timeToRemind);
-	  console.log(task);
-	  console.log(timeToRemind);
+      reminders.reminderMaker(task, time, workspaceId);
   	} else {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash tomorrow at 5pm"';
   	  
@@ -48,8 +51,7 @@ const interpreter = (text, username, workspaceId) => {
   	  } 
   	});
 	
-	//invoke tasks.newsfetcher(term);
-	console.log(term);
+	news.newsFetcher(term, workspaceId);
   } else {
   	errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders and fetching the latest news';
   	
@@ -61,6 +63,7 @@ const interpreter = (text, username, workspaceId) => {
 
 module.exports = { interpreter };
 
+// VALID INPUT FORMATS
 // /helper-bot remind me to take out the trash tomorrow at 5pm
 // /helper-bot remind me to pack later today
 // /helper-bot remind me to pack later next week
