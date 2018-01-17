@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, ListGroup } from 'reactstrap';
 
 export default ({ username }) => (
-	<div>
+	<option value={username}>
 		{username}
-	</div>
+	</option>
 );

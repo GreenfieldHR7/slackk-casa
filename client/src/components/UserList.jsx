@@ -5,6 +5,9 @@ import { Container, ListGroup } from 'reactstrap';
 
 export default ({ usernames }) => (
 	<Container>	
-   		{usernames.map(username => <UserEntry username={username} />)}
+		<select>
+			<option value="All users">All users</option>
+   			{usernames.map(username => <UserEntry username={username} />)}
+   		</select>
     </Container>
 );
