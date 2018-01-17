@@ -21,6 +21,7 @@ export default class App extends React.Component {
         },
       ],
       users: [],
+      usernames: [],
       workSpaces: [],
       query: '',
       currentWorkSpaceId: 0,
@@ -76,18 +77,26 @@ export default class App extends React.Component {
   //renders nav bar, body(which contains all message components other than input), and message input
   render() {
     let {
-      messages, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName,
+      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName,
     } = this.state;
     return (
       <div className="app-container">
         <NavBar currentWorkSpaceName={currentWorkSpaceName} />
         <Body
+          usernames={usernames}
           messages={messages}
           workSpaces={workSpaces}
           loadWorkSpaces={() => this.loadWorkSpaces()}
           changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
           currentWorkSpaceId={currentWorkSpaceId}
         />
+{/*        <Body
+          messages={messages}
+          workSpaces={workSpaces}
+          loadWorkSpaces={() => this.loadWorkSpaces()}
+          changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
+          currentWorkSpaceId={currentWorkSpaceId}
+        />*/}
         <div className="input-container">
           <Input
             value={query}

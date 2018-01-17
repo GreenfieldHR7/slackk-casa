@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432',
+  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres',
 //  ssl: true,
 });
 

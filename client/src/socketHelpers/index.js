@@ -4,11 +4,21 @@ let sent = false;
 const beep = new Audio('/sounds/pling.wav'); // sound on receive msg
 const oneup = new Audio('/sounds/coin.wav'); // sound on send msg
 
+const getUniqueUsernamesFromMessages = (messages) => {
+  let usernames = [];
+  for (let i = 0; i < messages.length; i++) {
+    usernames.push(messages[i].username);
+  }
+  return [...new Set(usernames)];
+};
+
 /* takes in an array of messages
   objects and sets the component state messages
   with the new array of messages recieved */
 const loadMessages = (messages) => {
   app.setState({ messages });
+  let usernames = getUniqueUsernamesFromMessages(messages);
+  app.setState({ usernames });
 };
 
 /* takes in message as object
