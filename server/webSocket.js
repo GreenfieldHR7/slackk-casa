@@ -132,11 +132,28 @@ const onMessage = async (ws, wss, data) => {
             message: postedMessage,
             workspaceId: message.data.workspaceId,
           }),
-        );
+        );          
       } catch (err) {
-        // respond back to client with error response and error message if message can't be posted to database
+        // respond back to client with error response and error message if messages can't be pulled from database
+        return ws.send(response(400, err.stack, message.method));
+      }  
+    case 'GETMESSAGESOFUSER':
+      try {
+        const userMessages = await db.getMessagesOfUser(message.data.user, Number(message.data.workspaceId));
+        // respond back to client with success response and list of messages if successfully pulled from database
+        return ws.send(response(200, 'Request success', message.method, userMessages )); 
+      } catch (err) {
+        // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
       }
+    case 'GETUSERSINCHANNEL':
+      try {
+        const usersInChannel = await db.getUsersInChannel(Number(message.data.workspaceId));
+        return ws.send(response(200, 'Request success', message.method, usersInChannel )); 
+      } catch (err) {
+        // respond back to client with error response and error message if messages can't be pulled from database
+        return ws.send(response(400, err.stack, message.method));
+      }      
     default:
       // unknown message sent to server, respond back to client
       return ws.send(response(405, 'Unknown method', message.method));

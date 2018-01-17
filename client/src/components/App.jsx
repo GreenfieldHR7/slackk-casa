@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, sendMessage } from '../socketHelpers';
+import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer } from '../socketHelpers';
 import { Input } from 'reactstrap';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
@@ -27,6 +27,7 @@ export default class App extends React.Component {
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
     };
+    this.handleSelectedUser = this.handleSelectedUser.bind(this);
   }
 
   componentDidMount() {
@@ -59,9 +60,17 @@ export default class App extends React.Component {
         query: '',
       });
     }
-
-
   }
+
+  handleSelectedUser(event) {
+    let currentWorkSpaceId = this.state.currentWorkSpaceId;
+    if (event.target.value === "All users") {
+      getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+    } else {
+      getMessagesOfUser(event.target.value, currentWorkSpaceId);     
+    }
+  }
+
   //grabs all existing workspaces
   loadWorkSpaces() {
     fetch('/workspaces')
@@ -89,14 +98,8 @@ export default class App extends React.Component {
           loadWorkSpaces={() => this.loadWorkSpaces()}
           changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
           currentWorkSpaceId={currentWorkSpaceId}
+          handleSelectedUser={this.handleSelectedUser}
         />
-{/*        <Body
-          messages={messages}
-          workSpaces={workSpaces}
-          loadWorkSpaces={() => this.loadWorkSpaces()}
-          changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
-          currentWorkSpaceId={currentWorkSpaceId}
-        />*/}
         <div className="input-container">
           <Input
             value={query}

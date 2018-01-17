@@ -50,6 +50,19 @@ const getMessages = workspaceId =>
     .then(data => client.query('SELECT * FROM $db_name'.replace('$db_name', data.rows[0].db_name)))
     .then(data => data.rows);
 
+const getMessagesOfUser = (user, workspaceId) => 
+  client
+    .query('SELECT db_name FROM workspaces WHERE id = $1', [workspaceId])
+    // pull messages from workspace's messages table
+    .then(data => client.query('SELECT * FROM $db_name WHERE username = ($1)'.replace('$db_name', data.rows[0].db_name), [user]))
+    .then(data => data.rows);
+
+const getUsersInChannel = workspaceId =>
+  client
+    .query('SELECT db_name FROM workspaces WHERE id = $1', [workspaceId])
+    .then(data => client.query('SELECT username FROM $db_name'.replace('$db_name', data.rows[0].db_name)))
+    .then(data => data.rows);  
+
 // post new user to users table in database
 const createUser = (username, passhash, email, passhint) =>
   client.query(
@@ -110,4 +123,6 @@ module.exports = {
   getWorkspaces,
   getEmails,
   getPasswordHint,
+  getMessagesOfUser,
+  getUsersInChannel,
 };

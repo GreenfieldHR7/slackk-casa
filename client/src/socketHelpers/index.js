@@ -4,21 +4,24 @@ let sent = false;
 const beep = new Audio('/sounds/pling.wav'); // sound on receive msg
 const oneup = new Audio('/sounds/coin.wav'); // sound on send msg
 
-const getUniqueUsernamesFromMessages = (messages) => {
-  let usernames = [];
-  for (let i = 0; i < messages.length; i++) {
-    usernames.push(messages[i].username);
+const getUniqueUsernamesFromMessages = (users) => {
+  let uniqueUsernames = [];
+  for (let i = 0; i < users.length; i++) {
+    uniqueUsernames.push(users[i].username);
   }
-  return [...new Set(usernames)];
+  return [...new Set(uniqueUsernames)];
 };
+
+const loadUsers = users => {
+  let usernames = getUniqueUsernamesFromMessages(users);
+  app.setState({usernames});
+}
 
 /* takes in an array of messages
   objects and sets the component state messages
   with the new array of messages recieved */
 const loadMessages = (messages) => {
   app.setState({ messages });
-  let usernames = getUniqueUsernamesFromMessages(messages);
-  app.setState({ usernames });
 };
 
 /* takes in message as object
@@ -59,6 +62,16 @@ const getWorkSpaceMessagesFromServer = (id) => {
   ws.send(JSON.stringify(msg));
 };
 
+const getUsersInChannel = (id) => {
+  const msg = { method: 'GETUSERSINCHANNEL', data: { workspaceId: id } };
+  ws.send(JSON.stringify(msg));
+};
+
+const getMessagesOfUser = (user, workSpaceId) => {
+  const msg = { method: 'GETMESSAGESOFUSER', data: { user, workspaceId: workSpaceId } };
+  ws.send(JSON.stringify(msg));
+};
+
 // takes in all new messages and filters and concats messages that match the current workSpace
 const filterMsgByWorkSpace = (msg) => {
   if (sent) {
@@ -95,6 +108,12 @@ const afterConnect = () => {
       case 'POSTMESSAGE':
         addNewMessage(serverResp.data);
         break;
+      case 'GETMESSAGESOFUSER':
+        loadMessages(serverResp.data);
+        break;
+      case 'GETUSERSINCHANNEL':
+        loadUsers(serverResp.data);
+        break;
       default:
     }
   };
@@ -121,4 +140,4 @@ const connect = (server, component) => {
   });
 };
 
-export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer };
+export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer, getMessagesOfUser, getUsersInChannel };
