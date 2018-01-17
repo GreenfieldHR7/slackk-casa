@@ -28,6 +28,7 @@ export default class App extends React.Component {
       currentWorkSpaceName: '',
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
+    this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +84,10 @@ export default class App extends React.Component {
   changeCurrentWorkSpace(id, name) {
     this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name });
   }
+
+  getMessagesByKeywords() {
+    console.log('DAAA');
+  }
   //renders nav bar, body(which contains all message components other than input), and message input
   render() {
     let {
@@ -99,6 +104,7 @@ export default class App extends React.Component {
           changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
           currentWorkSpaceId={currentWorkSpaceId}
           handleSelectedUser={this.handleSelectedUser}
+          search={this.getMessagesByKeywords}
         />
         <div className="input-container">
           <Input
