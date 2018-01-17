@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 
 const db = require('../database');
+const bot = require('../helper-bot/interpreter.js');
 
 // creates a response object for sending to clients
 /*
@@ -102,8 +103,7 @@ const onMessage = async (ws, wss, data) => {
       try {
         // check for bot request
         if (message.data.text.indexOf('/helper-bot') > -1) {
-          //console.log(message.data.text);
-          //bot.interpreter(message.data.text, message.data.username, message.data.worksapceId, () => {});
+          bot.interpreter(message.data.text, message.data.username, message.data.worksapceId);
         }
 
         // post the given message to the database
