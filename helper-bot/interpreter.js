@@ -1,5 +1,3 @@
-
-
 //const tasks = require('./tasks');
 
 const interpreter = (text, username, workspaceId) => {
@@ -29,12 +27,15 @@ const interpreter = (text, username, workspaceId) => {
   	if (taskIndex && timeToRemindIndex) {
   	  task = words.slice(taskIndex + 1, timeToRemindIndex).join(' ');
   	  timeToRemind = words.slice(timeToRemindIndex).join(' ');
+	  
+      //invoke tasks.reminder(task, timeToRemind);
 	  console.log(task);
 	  console.log(timeToRemind);
   	} else {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash tomorrow at 5pm"';
-  	  console.log(errorMessage);
+  	  
   	  //invoke error handler
+  	  console.log(errorMessage);
   	}
   } else if (text.indexOf('news') > -1 || text.indexOf('stories') > -1) {
   	let term = undefined;
@@ -44,17 +45,16 @@ const interpreter = (text, username, workspaceId) => {
   	  
   	  if (lowerCaseWord === 'on' || lowerCaseWord === 'about') {
   	  	term = words.slice(index + 1).join(' ');
-	  	//invoke tasks.newsfetcher(term);
-  	  } else {
-  	  	errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot send me news about cats"';
-  	    console.log(errorMessage);
-  	  	//invoke error handler
-  	  }
+  	  } 
   	});
+	
+	//invoke tasks.newsfetcher(term);
+	console.log(term);
   } else {
   	errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders and fetching the latest news';
-  	console.log(errorMessage);
+  	
   	//invoke error handler
+  	console.log(errorMessage);
   }
 }
 
@@ -71,7 +71,7 @@ module.exports = { interpreter };
 // /helper-bot send me stories about cats
 // /helper-bot send me news on cats
 // /helper-bot send me stories about cats
-// /helper-bot send aaaahhh!
+// /helper-bot send me news
 
 // /helper-bot aaaahhhh!
 
