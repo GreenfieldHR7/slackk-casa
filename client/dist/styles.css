@@ -76,3 +76,7 @@
   background-color: #4c9689;
   color: #ffffff;
 }
+
+.filter-messages {
+  float: right;
+}

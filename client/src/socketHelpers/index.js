@@ -73,6 +73,11 @@ const getMessagesOfUser = (user, workSpaceId) => {
   ws.send(JSON.stringify(msg));
 };
 
+// const searchMessagesInWorkingSpace = (query, workSpaceId) => {
+//   const msg = { method: 'GETMESSAGESBYKEYWORDS', data: { query, workSpaceId } };
+//   ws.send(JSON.stringify(msg));
+// };
+
 // takes in all new messages and filters and concats messages that match the current workSpace
 const filterMsgByWorkSpace = (msg) => {
   if (sent) {

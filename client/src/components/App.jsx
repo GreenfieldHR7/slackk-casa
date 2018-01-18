@@ -26,8 +26,10 @@ export default class App extends React.Component {
       query: '',
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
+      selectedUser: 'All users', 
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
+    this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
   }
 
   componentDidMount() {
@@ -64,11 +66,15 @@ export default class App extends React.Component {
 
   handleSelectedUser(event) {
     let currentWorkSpaceId = this.state.currentWorkSpaceId;
-    if (event.target.value === "All users") {
-      getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+    // event.target.value is user when one was selected from option selection
+    // event is this.selectedUser when one changes input in search textbox   
+    let username = event ? event.target.value : this.state.selectedUser; 
+    if (username === "All users") {
+        getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
     } else {
-      getMessagesOfUser(event.target.value, currentWorkSpaceId);     
-    }
+      getMessagesOfUser(username, currentWorkSpaceId);
+    } 
+    this.setState( { selectedUser: username } );      
   }
 
   //grabs all existing workspaces
@@ -81,12 +87,21 @@ export default class App extends React.Component {
 
   //Helper function to reassign current workspace
   changeCurrentWorkSpace(id, name) {
-    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name });
+    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name, selectedUser: 'All users' });
+  }
+
+  getMessagesByKeywords(query) {
+    // search only if query not empty
+    if (query.value !== '') {
+      let messages = this.state.messages
+        .filter(message => message.text.includes(query.value));
+      this.setState( { messages } );
+    }
   }
   //renders nav bar, body(which contains all message components other than input), and message input
   render() {
     let {
-      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName,
+      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser,
     } = this.state;
     return (
       <div className="app-container">
@@ -99,6 +114,8 @@ export default class App extends React.Component {
           changeCurrentWorkSpace={(id, name) => this.changeCurrentWorkSpace(id, name)}
           currentWorkSpaceId={currentWorkSpaceId}
           handleSelectedUser={this.handleSelectedUser}
+          getMessagesByKeywords={this.getMessagesByKeywords}
+          selectedUser={selectedUser}
         />
         <div className="input-container">
           <Input
