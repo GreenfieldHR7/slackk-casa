@@ -17,7 +17,7 @@ client
 // create tables needed by server
 const initializeDB = () => {
   // initialize tables by reading schema files and running as query
-  const schemas = ['/schema/users.sql', '/schema/workspaces.sql'];
+  const schemas = ['/schema/users.sql', '/schema/workspaces.sql', '/schema/privatechannels.sql'];
   return Promise.all(schemas.map(schema =>
     new Promise((resolve, reject) => {
       fs.readFile(
@@ -42,6 +42,22 @@ const postMessage = (message, username, workspaceId, poll) =>
         ),
         [message, username, poll],
       ));
+
+// post direct message to database
+const postDirectMessage = (message, username, directMessageId) => 
+  // pull privatechannel messages table name using directMessageId
+  client
+    .query('SELECT db_name FROM privatechannels WHERE id = $1', [directMessageId])
+    // post new message into directMessageId's messages table
+    .then(data =>
+      client.query(
+        'INSERT INTO $db_name (text, username) VALUES ($1, $2) RETURNING *'.replace(
+          '$db_name',
+          data.rows[0].db_name,
+        ),
+        [message, username],
+      ));  
+
 
 // get messages for workspace from database
 const getMessages = workspaceId =>
