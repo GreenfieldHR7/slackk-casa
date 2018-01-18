@@ -23,6 +23,7 @@ export default class Body extends React.Component {
       currentWorkSpaceId,
       handleSelectedUser,
       getMessagesByKeywords,
+      selectedUser,
     } = this.props;
     return (
       <Container fluid>
@@ -40,7 +41,10 @@ export default class Body extends React.Component {
           </Col>
           <Col>
             <UserList usernames={usernames} handleSelectedUser={handleSelectedUser}/>
-            <Search search={getMessagesByKeywords}/>
+            <Search 
+              getMessagesByKeywords={getMessagesByKeywords}
+              handleSelectedUser={handleSelectedUser} 
+            />
           </Col>
         </Row>
       </Container>
