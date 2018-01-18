@@ -102,9 +102,6 @@ const onMessage = async (ws, wss, data) => {
     */
       try {
         // check for bot request
-        if (message.data.text.indexOf('/helper-bot') > -1) {
-          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
-        }
 
         // post the given message to the database
         let postedMessage = await db.postMessage(
@@ -131,6 +128,11 @@ const onMessage = async (ws, wss, data) => {
           },
         }
         */
+        
+        if (message.data.text.indexOf('/helper-bot') > -1) {
+          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
+        }
+
         return updateEveryoneElse(
           ws,
           wss,

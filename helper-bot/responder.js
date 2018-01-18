@@ -36,7 +36,7 @@ const responder = (task, workspaceId, message, ws, wss) => {
   } else if (task === 'notes') {
   	//
   } else if (task === 'reminders') {
-  	//
+  	sendBotMessage(task, workspaceId, message, ws, wss);
   } else {
     //error case
   }
