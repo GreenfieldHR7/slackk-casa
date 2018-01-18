@@ -3,6 +3,7 @@ import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import MessageList from './MessageList.jsx';
 import WorkSpaceList from './WorkSpaceList.jsx';
 import UserList from './UserList.jsx';
+import Search from './Search.jsx';
 import PropTypes from 'prop-types';
 
 //container for other containers
@@ -21,6 +22,8 @@ export default class Body extends React.Component {
       changeCurrentWorkSpace,
       currentWorkSpaceId,
       handleSelectedUser,
+      getMessagesByKeywords,
+      selectedUser,
     } = this.props;
     return (
       <Container fluid>
@@ -33,14 +36,19 @@ export default class Body extends React.Component {
               currentWorkSpaceId={currentWorkSpaceId}
             />
           </Col>
-          <Col className="message-list-col" xs="10">
-            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId}/>
-          </Col>
-          <Col>
+          <Col className="message-list-col" xs="8">
+          <div className="filter-messages">
             <UserList usernames={usernames} handleSelectedUser={handleSelectedUser}/>
+            <Search 
+              getMessagesByKeywords={getMessagesByKeywords}
+              handleSelectedUser={handleSelectedUser} 
+            />
+          </div>
+            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId}/>
           </Col>
         </Row>
       </Container>
+
     );
   }
 }

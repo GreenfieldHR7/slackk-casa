@@ -153,7 +153,7 @@ const onMessage = async (ws, wss, data) => {
       } catch (err) {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
-      }      
+      }       
     default:
       // unknown message sent to server, respond back to client
       return ws.send(response(405, 'Unknown method', message.method));
