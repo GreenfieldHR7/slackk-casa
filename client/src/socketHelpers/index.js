@@ -75,19 +75,20 @@ const getMessagesOfUser = (user, workSpaceId) => {
 
 // Looks at a message to see if a user was mentioned and returns users mentioned
 const getUsersMentioned = (msg) => {
-  const splitByMention = msg.split('@');
   let potentialUsers = [];
+
+  const splitByMention = msg.split('@');
   splitByMention.splice(0, 1);
+
   for (var i = 0; i < splitByMention.length; i++) {
     let indexOfSpace = splitByMention[i].indexOf(' ');
     //in case @user is the last message
     if (indexOfSpace === -1) {
       indexOfSpace = splitByMention[i].length;
     }
-    const potentialUser = splitByMention[i].substring(0, indexOfSpace);
-    potentialUsers.push(potentialUser);
+    potentialUsers.push(splitByMention[i].substring(0, indexOfSpace));
   }
-  return potentialUsers;
+  return { names: potentialUsers, isNotified: false };
 };
 
 // takes in all new messages and filters and concats messages that match the current workSpace
@@ -98,9 +99,12 @@ const filterMsgByWorkSpace = (msg) => {
     beep.play();
   }
 
+  //notifies users in the mentioned workspace
   const workspaceId = msg.workspaceId
   const usersMentioned = getUsersMentioned(msg.message.text);
-  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId }] });
+  const notificationMessage = `New mention from ${msg.message.username}`;
+  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId, notificationMessage }] });
+
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }

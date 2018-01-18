@@ -19,8 +19,12 @@ export default class WorkSpaceEntry extends Component {
     for (var i = 0; i < workspaceMentioned.length; i++) {
       const mention = workspaceMentioned[i];
       if (mention.workspaceId === workSpace.id) {
-        const indexUser = mention.usersMentioned.indexOf(currentUser);
-        mention.usersMentioned.splice(indexUser, 1);
+        let indexUser = mention.usersMentioned.names.indexOf(currentUser);
+        mention.usersMentioned.names.splice(indexUser, 1);
+        if (mention.usersMentioned.names.includes('channel')) {
+          indexUser = mention.usersMentioned.names.indexOf('channel');
+          mention.usersMentioned.names.splice(indexUser, 1);
+        }
       }
     }
   }
@@ -28,15 +32,21 @@ export default class WorkSpaceEntry extends Component {
   render() {
     let { workSpace, currentWorkSpaceId, workspaceMentioned, currentUser } = this.props;
 
+    //notification for users mentioned within the workspace
     let workspaceName = '#' + workSpace.name;
     for (var i = 0; i < workspaceMentioned.length; i++) {
       const mention = workspaceMentioned[i];
-      if (mention.workspaceId === workSpace.id) {
-        if (mention.usersMentioned.includes(currentUser)) {
+      if (mention.usersMentioned.names.includes(currentUser) || mention.usersMentioned.names.includes('channel')) {
+        if (!mention.usersMentioned.isNotified) {
+          const notification = new Notification(mention.notificationMessage);
+          mention.usersMentioned.isNotified = true;
+        }
+        if (mention.workspaceId === workSpace.id) {
           workspaceName = <Alert color="dark"> # {workSpace.name} </Alert>
         }
       }
     }
+
     return (
       <div className="workSpace-entry-container">
         {workSpace.id === currentWorkSpaceId ? (

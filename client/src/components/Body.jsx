@@ -27,6 +27,14 @@ export default class Body extends React.Component {
       workspaceMentioned,
       currentUser,
     } = this.props;
+
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'default') {
+        console.log(`The permission request was dismissed. Allow a retry`);
+        return;
+      }
+    });
+
     return (
       <Container fluid>
        <Row>
