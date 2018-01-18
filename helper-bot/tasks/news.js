@@ -1,7 +1,6 @@
 const request = require('request');
 const config = require('../../config.js');
-
-// const response = require('./responder.js');
+const response = require('../../helper-bot/responder.js');
 
 
 const newsFetcher = (term, workspaceId) => {
@@ -17,20 +16,7 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    request(options, (error, response, body) => {
-      if (error) {
-      	console.error(error);
-      } else {
-        let news = [];
-
-        for (let i = 0; i < 5; i++) {
-          let article = body.articles[i];
-          news.push(article.title);
-        }
-
-        console.log(news);
-      }
-    });
+    requester(options);
   } else {
   	let options = { 
   	  method: 'GET',
@@ -42,20 +28,7 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    request(options, (error, response, body) => {
-      if (error) {
-      	console.error(error);
-      } else {
-        let news = [];
-
-        for (let i = 0; i < 5; i++) {
-          let article = body.articles[i];
-          news.push(article.title);
-        }
-
-        console.log(news);
-      }
-    });
+    requester(options);
   }
 
   //why is this undefined??
@@ -63,6 +36,23 @@ const newsFetcher = (term, workspaceId) => {
 
   //response.responder('news', true, 'test message from newsFetcher');
 };
+
+const requester = (options) => {
+  request(options, (error, response, body) => {
+    if (error) {
+      console.error(error);
+    } else {
+      let news = [];
+
+      for (let i = 0; i < 5; i++) {
+        let article = body.articles[i];
+        news.push(article.title);
+      }
+
+      console.log(news);
+    }
+  });
+}
 
 
 module.exports = {newsFetcher};
