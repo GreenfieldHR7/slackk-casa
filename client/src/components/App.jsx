@@ -87,7 +87,7 @@ export default class App extends React.Component {
 
   //Helper function to reassign current workspace
   changeCurrentWorkSpace(id, name) {
-    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name });
+    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name, selectedUser: 'All users' });
   }
 
   getMessagesByKeywords(query) {
