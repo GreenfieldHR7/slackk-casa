@@ -42,10 +42,10 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 	//tomorrrow
   } else if (timeText.indexOf('tomorrow') > -1) {
   	timeOut = tomorrow_Handler.timeOutCalculator(timeText);
-  	
-	//next Tuesday
+
+	//next Tuesday -- treats this as the next upcoming Tuesday (e.g. saying next Tuesday on Monday would equate to tomorrow)
   } else if (timeText.indexOf('next') > -1) {
-  	console.log('next Tuesday');
+  	timeOut = next_Handler.timeOutCalculator(timeText);
 
 	//error
   } else {
