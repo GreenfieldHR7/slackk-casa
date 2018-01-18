@@ -91,6 +91,14 @@ const getUsersMentioned = (msg) => {
   return { names: potentialUsers, isNotified: false };
 };
 
+//notifies users in the mentioned workspace
+const notifyUsersMentioned = (msg) => {
+  const workspaceId = msg.workspaceId
+  const usersMentioned = getUsersMentioned(msg.message.text);
+  const notificationMessage = `New mention from ${msg.message.username}`;
+  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId, notificationMessage }] });
+}
+
 // takes in all new messages and filters and concats messages that match the current workSpace
 const filterMsgByWorkSpace = (msg) => {
   if (sent) {
@@ -98,13 +106,7 @@ const filterMsgByWorkSpace = (msg) => {
   } else {
     beep.play();
   }
-
-  //notifies users in the mentioned workspace
-  const workspaceId = msg.workspaceId
-  const usersMentioned = getUsersMentioned(msg.message.text);
-  const notificationMessage = `New mention from ${msg.message.username}`;
-  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId, notificationMessage }] });
-
+  
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }
@@ -127,6 +129,7 @@ const afterConnect = () => {
         break;
       case 'NEWMESSAGE':
         filterMsgByWorkSpace(serverResp.data);
+        notifyUsersMentioned(serverResp.data);
         break;
       case 'GETUSERS':
         setUsers(serverResp.data);
