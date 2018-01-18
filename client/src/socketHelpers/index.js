@@ -76,27 +76,20 @@ const getMessagesOfUser = (user, workSpaceId) => {
 // Looks at a message to see if a user was mentioned and returns users mentioned
 const getUsersMentioned = (msg) => {
   const splitByMention = msg.split('@');
-  //define a potential users array
   let potentialUsers = [];
-  //define a users to be notified array
-  let notifiyUsers = [];
-  //remove first index of array since its empty
   splitByMention.splice(0, 1);
-  //loop through split array
   for (var i = 0; i < splitByMention.length; i++) {
-    //find index of first empty space
-    const indexOfSpace = splitByMention[i].indexOf(' ');
-    //use first empty space to find first word of each iteration and add to potential user
+    let indexOfSpace = splitByMention[i].indexOf(' ');
+    //in case @user is the last message
+    if (indexOfSpace === -1) {
+      indexOfSpace = splitByMention[i].length;
+    }
     const potentialUser = splitByMention[i].substring(0, indexOfSpace);
     potentialUsers.push(potentialUser);
   }
-  //loop through potential users
-  for (var i = 0; i < potentialUsers.length; i++) {
-    //if user exists, add to array ot users to be notified
-    const user = db.getUser(potentialUsers[i]);
-    console.log(user);
-  }
+  return potentialUsers;
 };
+
 // takes in all new messages and filters and concats messages that match the current workSpace
 const filterMsgByWorkSpace = (msg) => {
   if (sent) {
@@ -104,8 +97,10 @@ const filterMsgByWorkSpace = (msg) => {
   } else {
     beep.play();
   }
-  console.log('msg message', msg.message);
+
+  const workspaceId = msg.workspaceId
   const usersMentioned = getUsersMentioned(msg.message.text);
+  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId }] });
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }
