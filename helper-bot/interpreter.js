@@ -22,7 +22,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   	  	taskIndex = index;
   	  }
 
-	  if (lowerCaseWord === 'tomorrow' || lowerCaseWord === 'next' || lowerCaseWord === 'later' || lowerCaseWord === 'in' || lowerCaseWord === 'on') {
+	  if (lowerCaseWord === 'tomorrow' || lowerCaseWord === 'next' || lowerCaseWord === 'in' || lowerCaseWord === 'on' || lowerCaseWord === 'at') {
   	  	if (timeIndex === undefined) {
   	  	  timeIndex = index;	
   	  	}
