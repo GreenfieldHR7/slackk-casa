@@ -1,21 +1,32 @@
-//const socket = require('../../client/src/socketHelpers/index.js');
+const socket = require('../server/webSocket.js');
+const db = require('../database');
 
-// let server = location.origin.replace(/^http/, 'ws');
 
-// socket.connect(server, this);
+const response = (code, message, method, data) =>
+  JSON.stringify({
+    code,
+    message,
+    method,
+    data,
+  });
 
-const responder = (task, workspaceId, message) => {
+const responder = async (task, workspaceId, message, ws, wss) => {
   if (task === 'news') {
-  	console.log(task);
-  	console.log(workspaceId);
-  	console.log(message);
+    let postedMessage = await db.postMessage(
+      message,
+      'helper-bot',
+      workspaceId,
+    );
+  
+    [postedMessage] = postedMessage.rows;
 
+    ws.send(response(201, 'Post success', 'POSTMESSAGE', postedMessage));
 
-  	// socket.sendMessage({
-  	//   username: 'helper-bot',
-   //    text: message,
-   //    workspaceId: 1,
-  	// });
+  	socket.updateEveryoneElse(ws, wss, response(200, 'New message', 'NEWMESSAGE', {
+      message: postedMessage,
+      workspaceId: workspaceId,
+    }));
+
   } else if (task === 'notes') {
   	//
   } else if (task === 'reminders') {

@@ -5,7 +5,7 @@ const notes = require('./tasks/notes.js');
 const reminders = require('./tasks/reminders.js');
 
 
-const interpreter = (text, username, workspaceId) => {
+const interpreter = (text, username, workspaceId, ws, wss) => {
   let words = text.split(' ');
   let errorMessage = '';
   
@@ -51,7 +51,7 @@ const interpreter = (text, username, workspaceId) => {
   	  } 
   	});
 	
-	news.newsFetcher(term, workspaceId);
+	news.newsFetcher(term, workspaceId, ws, wss);
   } else {
   	errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders and fetching the latest news';
   	

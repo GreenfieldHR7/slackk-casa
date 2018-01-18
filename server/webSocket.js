@@ -103,7 +103,7 @@ const onMessage = async (ws, wss, data) => {
       try {
         // check for bot request
         if (message.data.text.indexOf('/helper-bot') > -1) {
-          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId);
+          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
         }
 
         // post the given message to the database
@@ -174,4 +174,5 @@ const onConnect = (ws, wss) => {
 
 module.exports = {
   onConnect,
+  updateEveryoneElse
 };

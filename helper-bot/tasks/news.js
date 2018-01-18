@@ -3,7 +3,7 @@ const config = require('../../config.js');
 const output = require('../../helper-bot/responder.js');
 
 
-const newsFetcher = (term, workspaceId) => {
+const newsFetcher = (term, workspaceId, ws, wss) => {
   if (term) {
   	let options = { 
   	  method: 'GET',
@@ -16,7 +16,7 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    requester(options, workspaceId);
+    requester(options, workspaceId, ws, wss);
   } else {
   	let options = { 
   	  method: 'GET',
@@ -28,11 +28,11 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    requester(options, workspaceId);
+    requester(options, workspaceId, ws, wss);
   }
 };
 
-const requester = (options, workspaceId) => {
+const requester = (options, workspaceId, ws, wss) => {
   request(options, (error, response, body) => {
     if (error) {
       console.error(error);
@@ -44,7 +44,7 @@ const requester = (options, workspaceId) => {
         news.push(article.title);
       }
 
-      output.responder('news', workspaceId, news);
+      output.responder('news', workspaceId, news, ws, wss);
     }
   });
 }
