@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 
 const db = require('../database');
+const bot = require('../helper-bot/interpreter.js');
 
 // creates a response object for sending to clients
 /*
@@ -100,6 +101,11 @@ const onMessage = async (ws, wss, data) => {
     }
     */
       try {
+        // check for bot request
+        if (message.data.text.indexOf('/helper-bot') > -1) {
+          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
+        }
+
         // post the given message to the database
         let postedMessage = await db.postMessage(
           message.data.text,
@@ -168,4 +174,5 @@ const onConnect = (ws, wss) => {
 
 module.exports = {
   onConnect,
+  updateEveryoneElse
 };
