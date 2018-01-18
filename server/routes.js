@@ -174,9 +174,33 @@ router.post('/aws/upload', upload.single('theseNamesMustMatch'), (req, res) => {
   });
 })
 
+// private channels routing
+router.get('/privatechannels/:user', async (req, res) => {
+  try {
+    return res.status(200).json(await db.getPrivateChannels(req.params.user));
+  } catch (err) {
+    return res.status(500).json(err.stack);
+  }
+});
 
-
-
-
+router.post('/privatechannels', bodyParser.json());
+router.post('/privatechannels', async (req, res) => {
+  try {
+    const privateChannels = await db.getPrivateChannels(res.body.currUser);
+    if (
+      privateChannels.find(privateChannel => 
+        ((privateChannel.username1.toLowerCase() === req.body.currUser.toLowerCase() &&
+          privateChannel.username2.toLowerCase() === req.body.otherUser.toLowerCase()) ||
+        (privateChannel.username2.toLowerCase() === req.body.currUser.toLowerCase() &&
+          privateChannel.username1.toLowerCase() === req.body.otherUser.toLowerCase())))
+    ) {
+      return res.status(400).json('workspace exists');
+    }
+    await db.createPrivateChannel(req.body.currUser, req.body.otherUser);
+    return res.sendStatus(201);
+  } catch (err) {
+    return res.status(500).json(err.stack);
+  }
+});
 
 module.exports = router;
