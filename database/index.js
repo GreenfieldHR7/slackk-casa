@@ -47,8 +47,8 @@ const postMessage = (message, username, workspaceId, poll) =>
 const postDirectMessage = (message, username, directMessageId) => 
   // pull privatechannel messages table name using directMessageId
   client
-    .query('SELECT db_name FROM privatechannels WHERE id = $1', [directMessageId])
-    // post new message into directMessageId's messages table
+    .query(`SELECT db_name FROM privatechannels WHERE id = $1`, [directMessageId])
+    // post new message into workspace's messages table
     .then(data =>
       client.query(
         'INSERT INTO $db_name (text, username) VALUES ($1, $2) RETURNING *'.replace(
@@ -56,14 +56,22 @@ const postDirectMessage = (message, username, directMessageId) =>
           data.rows[0].db_name,
         ),
         [message, username],
-      ));  
 
+      ));  
 
 // get messages for workspace from database
 const getMessages = workspaceId =>
   // pull workspace messages table name using workspaceId
+  getMessagesFrom(workspaceId, 'workspaces');
+
+// get messages for private channel from database
+const getDirectMessages = privatechannelId => 
+  // pull private channel messages table name using privatechannelId
+  getMessagesFrom(privatechannelId, 'privatechannels');
+
+const getMessagesFrom = (placeId, place) => 
   client
-    .query('SELECT db_name FROM workspaces WHERE id = $1', [workspaceId])
+    .query(`SELECT db_name FROM ${place} WHERE id = $1`, [placeId])
     // pull messages from workspace's messages table
     .then(data => client.query('SELECT * FROM $db_name'.replace('$db_name', data.rows[0].db_name)))
     .then(data => data.rows);
@@ -103,7 +111,23 @@ const getPasswordHint = username =>
 // creates a new workspace
 const createWorkspace = (name, dbName = `ws_${name[0]}${Date.now()}`) =>
   // add a new entry into workspaces table
-  client.query('INSERT INTO workspaces (name, db_name) VALUES ($1, $2) RETURNING *', [name, dbName])
+  client.query(`INSERT INTO workspaces (name, db_name) VALUES ($1, $2) RETURNING *`, [name, dbName])
+    .then(() =>
+    // read messages schema and insert workspace table name
+      new Promise((resolve, reject) => {
+        fs.readFile(
+          path.join(__dirname, '/schema/messages.sql'),
+          'utf8',
+          (err, data) => (err ? reject(err) : resolve(data)),
+        );
+      }))
+    // run query to create messages table for workspace
+    .then(data => client.query(data.replace('$1', dbName).replace('$1_pk', `${dbName}_pk`)));
+
+// creates a new private channel
+const createPrivateChannel = (currentUser, otherUser, dbName = `dm_${currentUser}${otherUser}`) =>
+  // add a new entry into privatechannels table
+  client.query(`INSERT INTO privatechannels (username1, username2, db_name) VALUES ($1, $2, $3) RETURNING *`, [currentUser, otherUser, dbName])
     .then(() =>
     // read messages schema and insert workspace table name
       new Promise((resolve, reject) => {
@@ -118,6 +142,11 @@ const createWorkspace = (name, dbName = `ws_${name[0]}${Date.now()}`) =>
 
 // pull list of workspaces from database
 const getWorkspaces = () => client.query('SELECT * FROM workspaces').then(data => data.rows);
+
+// pull list of private channels from database
+const getPrivateChannels = (user) => 
+  client.
+    query('SELECT * FROM privatechannels WHERE username1 = $1 OR username2 = $1', [user]).then(data => data.rows);
 
 // pull all emails from users table
 const getEmails = () => client.query('SELECT email FROM USERS')
@@ -161,4 +190,6 @@ module.exports = {
   getMessagesOfUser,
   getUsersInChannel,
   updatePollOption,
+  getPrivateChannels,
+  createPrivateChannel
 };
