@@ -38,10 +38,14 @@ export default class Body extends React.Component {
           </Col>
           <Col className="message-list-col" xs="8">
           <div className="filter-messages">
-            <UserList usernames={usernames} handleSelectedUser={handleSelectedUser}/>
+            <UserList 
+              usernames={usernames} 
+              handleSelectedUser={handleSelectedUser}
+              selectedUser={selectedUser}
+            />
             <Search 
               getMessagesByKeywords={getMessagesByKeywords}
-              handleSelectedUser={handleSelectedUser} 
+              handleSelectedUser={handleSelectedUser}              
             />
           </div>
             <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId}/>

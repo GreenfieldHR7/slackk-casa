@@ -115,6 +115,7 @@ export default class App extends React.Component {
           currentWorkSpaceId={currentWorkSpaceId}
           handleSelectedUser={this.handleSelectedUser}
           getMessagesByKeywords={this.getMessagesByKeywords}
+          selectedUser={selectedUser}
         />
         <div className="input-container">
           <Input
