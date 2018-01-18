@@ -24,7 +24,17 @@ export default class Body extends React.Component {
       handleSelectedUser,
       getMessagesByKeywords,
       selectedUser,
+      workspaceMentioned,
+      currentUser,
     } = this.props;
+
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'default') {
+        console.log(`The permission request was dismissed. Allow a retry`);
+        return;
+      }
+    });
+
     return (
       <Container fluid>
        <Row>
@@ -34,6 +44,8 @@ export default class Body extends React.Component {
               loadWorkSpaces={loadWorkSpaces}
               changeCurrentWorkSpace={changeCurrentWorkSpace}
               currentWorkSpaceId={currentWorkSpaceId}
+              workspaceMentioned={workspaceMentioned}
+              currentUser={currentUser}
             />
           </Col>
           <Col className="message-list-col" xs="8">
