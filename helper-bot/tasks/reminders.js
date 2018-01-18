@@ -1,12 +1,21 @@
 const output = require('../../helper-bot/responder.js');
 
 
-const reminderMaker = (task, time, workspaceId) => {
-  console.log(task);
-  console.log(time);
+const reminderMaker = (task, time, username, workspaceId) => {
+  let timeInterval = undefined;
+  let immediateBotMessageOnError = '';
+  let immediateBotMessageOnSuccess = '';
+  let timedBotMessageOnSuccess = '';
+  
+  //do logic to try to set timeInterval
 
-  //reminder = 'I will remind you to x in y'
-  //output.responder('reminders', workspaceId, reminder, ws, wss);
+  if (timeInterval) {
+  	//
+  } else {
+	  immediateBotMessageOnError = `Hey ${username}, I couldn't work out when you wanted me to remind you to ${task}. Please try again.`;
+	  console.log(immediateBotMessageOnError);
+  	//output.responder('reminders', workspaceId, immediateBotMessageOnError, ws, wss);
+  }
 };
 
 

@@ -33,7 +33,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   	  task = words.slice(taskIndex + 1, timeIndex).join(' ');
   	  time = words.slice(timeIndex).join(' ');
 	  
-      reminders.reminderMaker(task, time, workspaceId);
+      reminders.reminderMaker(task, time, username, workspaceId);
   	} else {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash tomorrow at 5pm"';
   	  
