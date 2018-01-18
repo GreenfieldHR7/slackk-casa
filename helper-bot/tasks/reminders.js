@@ -1,46 +1,54 @@
 const output = require('../../helper-bot/responder.js');
 
+const at_Handler = require('./handlers/at.js');
+const in_Handler = require('./handlers/in.js');
+const next_Handler = require('./handlers/next.js');
+const nextAt_Handler = require('./handlers/nextAt.js');
+const on_Handler = require('./handlers/on.js');
+const onAt_Handler = require('./handlers/onAt.js');
+const tomorrow_Handler = require('./handlers/tomorrow.js');
+const tomorrowAt_Handler = require('./handlers/tomorrowAt.js');
+
 
 const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
   let maxTimeOut = 604801; //seven days in seconds
   let immediateBotMessageOnError;
-  
-  let timeOut = timeCalculator(timeText);
+  let timeOut;
 
+	//on Sunday at 5pm
   if (timeText.indexOf('on') > -1 && timeText.indexOf('at') > -1) {
-  	//on Sunday at 5pm
   	console.log('on Sunday at 5pm');
 
+	//tomorrow at 5pm
   } else if (timeText.indexOf('tomorrow') > -1 && timeText.indexOf('at') > -1) {
-  	//tomorrow at 5pm
   	console.log('tomorrow at 5pm');
 
+	//next Tuesday at 5pm
   } else if (timeText.indexOf('next') > -1 && timeText.indexOf('at') > -1) {
-  	//next Tuesday at 5pm
   	console.log('next Tuesday at 5pm');
 
-  } else if (timeText.indexOf('on') > -1) {
-  	//on Sunday
-  	console.log('on Sunday');
+	//in 60 seconds
+  } else if (timeText.indexOf('in') > -1) {
+  	timeOut = in_Handler.timeOutCalculator(timeText);
 
+	//at 5pm
   } else if (timeText.indexOf('at') > -1) {
-  	//at 5pm
   	console.log('at 5pm');
 
-  } else if (timeText.indexOf('in') > -1) {
-  	//in 60 seconds
-  	console.log('in 60 seconds');
+	//on Sunday
+  } else if (timeText.indexOf('on') > -1) {
+  	console.log('on Sunday');
 
+	//tomorrrow
   } else if (timeText.indexOf('tomorrow') > -1) {
-  	//tomorrrow
   	console.log('tomorrow');
 
+	//next Tuesday
   } else if (timeText.indexOf('next') > -1) {
-  	//next Tuesday
   	console.log('next Tuesday');
 
+	//error
   } else {
-  	//error
   	console.log('error');
   }
 
@@ -67,36 +75,6 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
   }
 };
 
-//only handles numbers (1,2,3...) not one, two, three
-const timeCalculator = (timeText) => {
-	let timeInputs = timeText.split(' ');
-	let validTimeTableInput = false;
-	let validNumberInput = false;
-	let timeOut = 1;
-
-	timeInputs.forEach(input => {
-		for (let key in timeTable) {
-			if (input.indexOf(key) > -1) {
-				timeOut *= timeTable[key];
-				validTimeTableInput = true;
-			}
-		}
-
-		if (parseInt(input)) {
-			timeOut *= input;
-			validNumberInput = true;
-		}
-	});
-
-	return validTimeTableInput && validNumberInput  ? timeOut : undefined;
-};
-
-const timeTable = {
-	second: 1,
-	minute: 60,
-	hour: 60 * 60,
-	day: 60 * 60 * 24
-};
 
 const weekTable = {
 	mon: 1,
