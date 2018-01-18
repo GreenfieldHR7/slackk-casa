@@ -1,3 +1,4 @@
+
 //only handles numbers (1,2,3...) not one, two, three
 const timeOutCalculator = (timeText) => {
 	let timeInputs = timeText.split(' ');

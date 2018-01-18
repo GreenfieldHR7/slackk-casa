@@ -11,7 +11,7 @@ const tomorrowAt_Handler = require('./handlers/tomorrowAt.js');
 
 
 const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
-  let maxTimeOut = 604801; //seven days in seconds
+  let maxTimeOut = 604801; //number of seconds in seven days
   let immediateBotMessageOnError;
   let timeOut;
 
@@ -33,11 +33,11 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 
 	//at 5pm
   } else if (timeText.indexOf('at') > -1) {
-  	console.log('at 5pm');
+  	//timeOut = at_Handler.timeOutCalculator(timeText);
 
 	//on Sunday
   } else if (timeText.indexOf('on') > -1) {
-  	console.log('on Sunday');
+  	timeOut = on_Handler.timeOutCalculator(timeText);
 
 	//tomorrrow
   } else if (timeText.indexOf('tomorrow') > -1) {
@@ -49,7 +49,7 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 
 	//error
   } else {
-  	console.log('error');
+  	timeOut = undefined;
   }
 
   //valid inputs within allowable range
@@ -73,17 +73,6 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 	  immediateBotMessageOnError = `Hey ${username}, I couldn't work out when you wanted me to remind you to ${task}. Please try again.`;
   	output.responder('reminders', workspaceId, immediateBotMessageOnError, ws, wss);
   }
-};
-
-
-const weekTable = {
-	mon: 1,
-	tue: 2,
-	wed: 3,
-	thu: 4,
-	fri: 5,
-	sat: 6,
-	sun: 7
 };
 
 
