@@ -1,6 +1,6 @@
 const request = require('request');
 const config = require('../../config.js');
-const response = require('../../helper-bot/responder.js');
+const output = require('../../helper-bot/responder.js');
 
 
 const newsFetcher = (term, workspaceId) => {
@@ -16,7 +16,7 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    requester(options);
+    requester(options, workspaceId);
   } else {
   	let options = { 
   	  method: 'GET',
@@ -28,16 +28,11 @@ const newsFetcher = (term, workspaceId) => {
       json: true
     };
 
-    requester(options);
+    requester(options, workspaceId);
   }
-
-  //why is this undefined??
-  console.log(workspaceId);
-
-  //response.responder('news', true, 'test message from newsFetcher');
 };
 
-const requester = (options) => {
+const requester = (options, workspaceId) => {
   request(options, (error, response, body) => {
     if (error) {
       console.error(error);
@@ -49,7 +44,7 @@ const requester = (options) => {
         news.push(article.title);
       }
 
-      console.log(news);
+      output.responder('news', workspaceId, news);
     }
   });
 }

@@ -103,7 +103,7 @@ const onMessage = async (ws, wss, data) => {
       try {
         // check for bot request
         if (message.data.text.indexOf('/helper-bot') > -1) {
-          bot.interpreter(message.data.text, message.data.username, message.data.worksapceId);
+          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId);
         }
 
         // post the given message to the database
