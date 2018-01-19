@@ -8,10 +8,14 @@ const noteAdder = (note, username, workspaceId, ws, wss) => {
 		notes[username] = [];
 	}
 
-	notes[username].push(note);
-	
-	// let botAddMessageOnSuccess = `Hey ${username}, I\'ve added ${note} to your log.`;
-	// output.responder('notes', workspaceId, botAddMessageOnSuccess, ws, wss);
+	if (notes[username].indexOf(note) === -1) {
+		notes[username].push(note);
+		let botAddMessageOnSuccess = `Hey ${username}, I\'ve added ${note} to your log.`;
+		output.responder('notes', workspaceId, botAddMessageOnSuccess, ws, wss);
+	} else {
+		let botAddMessageOnDuplicate = `Oops ${username}! Looks like ${note} is already in your log.`;
+		output.responder('notes', workspaceId, botAddMessageOnDuplicate, ws, wss);
+	}
 };
 
 const notesFetcher = (username, workspaceId, ws, wss) => {
@@ -20,10 +24,10 @@ const notesFetcher = (username, workspaceId, ws, wss) => {
 		let botFetchMessageOnSuccess = `Hey ${username}, here is your log: ${noteList}`;
 
 		console.log(botFetchMessageOnSuccess);
+		output.responder('notes', workspaceId, botFetchMessageOnSuccess, ws, wss);
 	} else {
 		let botFetchMessageOnError = `Hey ${username}, I\'ve got some good news. Your log is empty.`;
-		console.log(botFetchMessageOnError);
-	  //output.responder(workspaceId, botFetchMessageOnError, ws, wss);
+	  output.responder('notes', workspaceId, botFetchMessageOnError, ws, wss);
 	}
 };
 
