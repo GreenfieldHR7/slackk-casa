@@ -26,6 +26,7 @@ export default class App extends React.Component {
       users: [],
       usernames: [],
       workSpaces: [],
+      privateChannels: [],
       query: '',
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
@@ -90,9 +91,16 @@ export default class App extends React.Component {
 
   //grabs all existing workspaces
   loadWorkSpaces() {
-    fetch('/workspaces')
+    fetch('/workspaces')  // fetches all workspaces. Returns response if succeed
+      .then(resp => resp.json())  // parses resp to a JSON. Returns workSpaces if succeed
+      .then(workSpaces => this.setState({ workSpaces }))  // finally, set State
+      .catch(console.error);
+  }
+
+  loadPrivateChannels() {
+    fetch(`/privatechannels/${this.props.location.state.username}`)
       .then(resp => resp.json())
-      .then(workSpaces => this.setState({ workSpaces }))
+      .then(privateChannels => this.setState({ privateChannels }))
       .catch(console.error);
   }
 
@@ -161,6 +169,8 @@ export default class App extends React.Component {
           selectedUser={selectedUser}
           workspaceMentioned={workspaceMentioned}
           currentUser={this.props.location.state.username}
+          loadPrivateChannels={() => this.loadPrivateChannels()}
+          privateChannels={privateChannels}
         />
         <div className="input-box">
           <div className="typing-alert">
