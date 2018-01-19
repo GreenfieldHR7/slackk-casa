@@ -23,6 +23,7 @@ export default class App extends React.Component {
           workspaceId: 0,
         },
       ],
+      currentUser: '',
       users: [],
       usernames: [],
       workSpaces: [],
@@ -30,13 +31,15 @@ export default class App extends React.Component {
       query: '',
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
-      selectedUser: 'All users', 
-      workspaceMentioned: [],
       poll: [],
       popoverOpen: false,
       typer: '',
       typerWorkSpaceId: '',
       renderTyping: false,
+      selectedUser: 'All users', // for selected messages by user filter
+      workspaceMentioned: []
+      currentPrivateChannelId: '',
+      currentPrivateChannelName: '',
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
@@ -49,6 +52,7 @@ export default class App extends React.Component {
     let server = location.origin.replace(/^http/, 'ws');
     // connect to the websocket server
     connect(server, this);
+    this.setState({ currentUser: this.props.location.state.username });
   }
 
   // changes the query state based on user input in text field
@@ -106,7 +110,23 @@ export default class App extends React.Component {
 
   //Helper function to reassign current workspace
   changeCurrentWorkSpace(id, name) {
-    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name, selectedUser: 'All users' });
+    this.setState({ 
+      currentWorkSpaceId: id, 
+      currentWorkSpaceName: name,
+      currentPrivateChannelId: '',
+      currentPrivateChannelName: '',  
+      selectedUser: 'All users' 
+    });
+  }
+
+  //Helper function to reassign current private channel
+  changeCurrentPrivateChannel(id, otherUser) {
+    this.setState({ 
+      currentPrivateChannelId: id, 
+      currentPrivateChannelName: otherUser,
+      currentWorkSpaceId: '',
+      currentWorkSpaceName: ''
+    });
   }
 
   getMessagesByKeywords(query) {
@@ -152,11 +172,27 @@ export default class App extends React.Component {
 
   render() {
     let {
-      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned, popoverOpen,
+      messages, 
+      usernames, 
+      query, 
+      workSpaces, 
+      currentWorkSpaceId, 
+      currentWorkSpaceName, 
+      selectedUser,
+      privateChannels,
+      currentPrivateChannelId,
+      currentPrivateChannelName,
+      currentUser,
+      workspaceMentioned,
+      popoverOpen
     } = this.state;
+  //  let currUser = this.props.location.state.username;
     return (
       <div className="app-container">
-        <NavBar currentWorkSpaceName={currentWorkSpaceName} />
+        <NavBar 
+          currentWorkSpaceName={currentWorkSpaceName}
+          currentPrivateChannelName={currentPrivateChannelName} 
+        />
         <Body
           usernames={usernames}
           messages={messages}
@@ -171,6 +207,9 @@ export default class App extends React.Component {
           currentUser={this.props.location.state.username}
           loadPrivateChannels={() => this.loadPrivateChannels()}
           privateChannels={privateChannels}
+          currentUser={currentUser}
+          changeCurrentPrivateChannel={(id, otherUser) => this.changeCurrentPrivateChannel(id, otherUser)}
+          currentPrivateChannelId={currentPrivateChannelId} 
         />
         <div className="input-box">
           <div className="typing-alert">
