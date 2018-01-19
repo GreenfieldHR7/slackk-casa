@@ -26,12 +26,25 @@
   display: flex;
   flex-direction: column-reverse;
 }
-
+.input-box {
+  width: 100%;
+}
 /* send message div container */
 .input-container {
-  height: 25vh;
+  height: 15vh;
   margin-left: 17%;
   margin-top: 10px;
+  width: 75%;
+  float: left;
+}
+.upload-file-button {
+  height: 15vh;
+  float: left;
+  margin-top: 10px;
+}
+.upload-button {
+  height: 7.5vh;
+  width: 5vh;
 }
 
 /* bootstrap form control class
@@ -80,3 +93,7 @@
 .filter-messages {
   float: right;
 }
+.typing-alert {
+  margin-left: 25vh;
+}
+
