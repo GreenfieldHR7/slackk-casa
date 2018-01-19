@@ -90,6 +90,11 @@ const getWorkSpaceMessagesFromServer = (id) => {
   ws.send(JSON.stringify(msg));
 };
 
+const getPrivateChannelMessagesFromServer = (id) => {
+  const msg = { method: 'GETDIRECTMESSAGES', data: { privateChannelId: id } };
+  ws.send(JSON.stringify(msg));
+}
+
 const getUsersInChannel = (id) => {
   const msg = { method: 'GETUSERSINCHANNEL', data: { workspaceId: id } };
   ws.send(JSON.stringify(msg));
@@ -157,6 +162,8 @@ const afterConnect = () => {
       case 'GETMESSAGES':
         loadMessages(serverResp.data);
         break;
+      case 'GETDIRECTMESSAGES':
+        loadMessages(serverResp.data);
       case 'NEWMESSAGE':
         filterMsgByWorkSpace(serverResp.data);
         notifyUsersMentioned(serverResp.data);
@@ -208,4 +215,13 @@ const connect = (server, component) => {
   });
 };
 
-export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer, getMessagesOfUser, getUsersInChannel, updatePoll };
+export { 
+  connect, 
+  sendMessage, 
+  afterConnect, 
+  getWorkSpaceMessagesFromServer, 
+  getMessagesOfUser, 
+  getUsersInChannel,
+  getPrivateChannelMessagesFromServer,
+  updatePoll
+};
