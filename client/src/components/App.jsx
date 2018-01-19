@@ -37,7 +37,7 @@ export default class App extends React.Component {
       typerWorkSpaceId: '',
       renderTyping: false,
       selectedUser: 'All users', // for selected messages by user filter
-      workspaceMentioned: []
+      workspaceMentioned: [],
       currentPrivateChannelId: '',
       currentPrivateChannelName: '',
     };
