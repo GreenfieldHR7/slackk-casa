@@ -22,8 +22,6 @@ const notesFetcher = (username, workspaceId, ws, wss) => {
 	if (notes[username]) {
 		let noteList = notes[username];
 		let botFetchMessageOnSuccess = `Hey ${username}, here is your log: ${noteList}`;
-
-		console.log(botFetchMessageOnSuccess);
 		output.responder('notes', workspaceId, botFetchMessageOnSuccess, ws, wss);
 	} else {
 		let botFetchMessageOnError = `Hey ${username}, I\'ve got some good news. Your log is empty.`;
