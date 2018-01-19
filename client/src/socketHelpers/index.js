@@ -199,6 +199,9 @@ const connect = (server, component) => {
     // gets workspaces after connection
     app.loadWorkSpaces();
 
+    // gets private channels after connection
+    app.loadPrivateChannels();
+
     // calls after connect function that takes in the socket session
     // and app component
     afterConnect();
