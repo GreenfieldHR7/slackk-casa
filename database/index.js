@@ -102,6 +102,11 @@ const getUser = username =>
     .query('SELECT * FROM users WHERE username = ($1)', [username])
     .then(data => data.rows[0]);
 
+const getAllUsers = () => 
+  client
+    .query('SELECT username FROM users')
+    .then(data => data.rows);
+
 // pull user password hint from users table in database
 const getPasswordHint = username =>
   client
@@ -192,5 +197,6 @@ module.exports = {
   updatePollOption,
   getPrivateChannels,
   createPrivateChannel,
-  getDirectMessages
+  getDirectMessages,
+  getAllUsers
 };
