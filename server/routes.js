@@ -186,18 +186,28 @@ router.get('/privatechannels/:user', async (req, res) => {
 router.post('/privatechannels', bodyParser.json());
 router.post('/privatechannels', async (req, res) => {
   try {
-    const privateChannels = await db.getPrivateChannels(res.body.currUser);
-    if (
-      privateChannels.find(privateChannel => 
-        ((privateChannel.username1.toLowerCase() === req.body.currUser.toLowerCase() &&
-          privateChannel.username2.toLowerCase() === req.body.otherUser.toLowerCase()) ||
-        (privateChannel.username2.toLowerCase() === req.body.currUser.toLowerCase() &&
-          privateChannel.username1.toLowerCase() === req.body.otherUser.toLowerCase())))
-    ) {
-      return res.status(400).json('workspace exists');
-    }
+    // const privateChannels = await db.getPrivateChannels(res.body.currUser);
+    // if (
+    //   privateChannels.find(privateChannel => 
+    //     ((privateChannel.username1.toLowerCase() === req.body.currUser.toLowerCase() &&
+    //       privateChannel.username2.toLowerCase() === req.body.otherUser.toLowerCase()) ||
+    //     (privateChannel.username2.toLowerCase() === req.body.currUser.toLowerCase() &&
+    //       privateChannel.username1.toLowerCase() === req.body.otherUser.toLowerCase())))
+    // ) {
+    //   return res.status(400).json('workspace exists');
+    // }
     await db.createPrivateChannel(req.body.currUser, req.body.otherUser);
     return res.sendStatus(201);
+  } catch (err) {
+    return res.status(500).json(err.stack);
+  }
+});
+
+// gets all users in users table
+router.get('/users', async (req, res) => {
+  try {
+    console.log(await db.getAllUsers());
+    return res.status(200).json(await db.getAllUsers());
   } catch (err) {
     return res.status(500).json(err.stack);
   }
