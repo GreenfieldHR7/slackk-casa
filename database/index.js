@@ -191,5 +191,6 @@ module.exports = {
   getUsersInChannel,
   updatePollOption,
   getPrivateChannels,
-  createPrivateChannel
+  createPrivateChannel,
+  getDirectMessages
 };
