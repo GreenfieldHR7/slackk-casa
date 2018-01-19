@@ -3,7 +3,6 @@ const output = require('../../helper-bot/responder.js');
 const at_Handler = require('./handlers/at.js');
 const in_Handler = require('./handlers/in.js');
 const next_Handler = require('./handlers/next.js');
-const nextAt_Handler = require('./handlers/nextAt.js');
 const on_Handler = require('./handlers/on.js');
 const onAt_Handler = require('./handlers/onAt.js');
 const tomorrow_Handler = require('./handlers/tomorrow.js');
@@ -15,16 +14,12 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
   let immediateBotMessageOnError;
   let timeOut;
 
-	//on Sunday at 5pm
   if (timeText.indexOf('on') > -1 && timeText.indexOf('at') > -1) {
-  	console.log('on Sunday at 5pm');
+    timeOut = onAt_Handler.timeOutCalculator(timeText);
   } else if (timeText.indexOf('tomorrow') > -1 && timeText.indexOf('at') > -1) {
   	timeOut = tomorrowAt_Handler.timeOutCalculator(timeText);
-
-	//next Tuesday at 5pm
   } else if (timeText.indexOf('next') > -1 && timeText.indexOf('at') > -1) {
-  	console.log('next Tuesday at 5pm');
-
+  	timeOut = onAt_Handler.timeOutCalculator(timeText); //next Tuesday -- treats this as the next upcoming Tuesday (e.g. saying next Tuesday on Monday would equate to tomorrow)
   } else if (timeText.indexOf('in') > -1) {
   	timeOut = in_Handler.timeOutCalculator(timeText);
   } else if (timeText.indexOf('at') > -1) {
