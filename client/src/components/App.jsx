@@ -27,6 +27,7 @@ export default class App extends React.Component {
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
       selectedUser: 'All users', 
+      workspaceMentioned: []
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
@@ -34,7 +35,6 @@ export default class App extends React.Component {
 
   componentDidMount() {
     let server = location.origin.replace(/^http/, 'ws');
-
     // connect to the websocket server
     connect(server, this);
   }
@@ -101,7 +101,7 @@ export default class App extends React.Component {
   //renders nav bar, body(which contains all message components other than input), and message input
   render() {
     let {
-      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser,
+      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned,
     } = this.state;
     return (
       <div className="app-container">
@@ -116,6 +116,8 @@ export default class App extends React.Component {
           handleSelectedUser={this.handleSelectedUser}
           getMessagesByKeywords={this.getMessagesByKeywords}
           selectedUser={selectedUser}
+          workspaceMentioned={workspaceMentioned}
+          currentUser={this.props.location.state.username}
         />
         <div className="input-container">
           <Input

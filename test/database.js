@@ -6,8 +6,8 @@ describe('Database', () => {
   describe('client.connect', () => {
     it('should connect to the database', (done) => {
       const client = new Client({
-        connectionString: process.env.DATABASE_URL,
-        ssl: true,
+        connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres'
+        // ssl: true,
       });
       client.connect((err) => {
         expect(err).to.not.be.an('error');

@@ -74,7 +74,7 @@ const onMessage = async (ws, wss, data) => {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
       }
-    case 'POSTMESSAGE':
+      case 'POSTMESSAGE':
     // method POSTMESSAGE posts a message to the workspace for the given workspaceId
     /*
     Request from client to server:
