@@ -35,7 +35,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
       reminders.reminderMaker(task, time, username, workspaceId, ws, wss);
   	} else {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash 2 hours."';
-  	  output.responder('error', workspaceId, errorMessage, ws, wss);
+  	  output.responder(workspaceId, errorMessage, ws, wss);
   	}  
   } else if (text.indexOf('news') > -1 || text.indexOf('stories') > -1) {
   	let term = undefined;
@@ -73,19 +73,18 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
         notes.noteAdder(note, username, workspaceId, ws, wss);
       } else {
         errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add pick up the groceries to my to-do list."';
-        output.responder('error', workspaceId, errorMessage, ws, wss);
+        output.responder(workspaceId, errorMessage, ws, wss);
       }
     } else if (text.indexOf('send') > -1 || text.indexOf('show') > -1) {
       notes.notesFetcher(username, workspaceId, ws, wss);
     } else {
       errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add something to my notes" or "/helper-bot send me my to-do list."';
-      output.responder('error', workspaceId, errorMessage, ws, wss);
+      output.responder(workspaceId, errorMessage, ws, wss);
     }
   } else {
-  	errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders and fetching the latest news';
-  	
   	//invoke error handler -- connect this to NLP API**
-  	console.log(errorMessage);
+    errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders, creating to-do lists/ notes, and fetching the latest news.';
+    output.responder(workspaceId, errorMessage, ws, wss);
   }
 }
 

@@ -30,17 +30,8 @@ const sendBotMessage = async (workspaceId, message, ws, wss) => {
   );  
 }
 
-//don't need the control flow
-const responder = (task, workspaceId, message, ws, wss) => {
-  if (task === 'news') {
-    sendBotMessage(workspaceId, message, ws, wss);
-  } else if (task === 'notes') {
-  	sendBotMessage(workspaceId, message, ws, wss);
-  } else if (task === 'reminders') {
-  	sendBotMessage(workspaceId, message, ws, wss);
-  } else if (task === 'error') {
-    sendBotMessage(workspaceId, message, ws, wss);
-  }
+const responder = (workspaceId, message, ws, wss) => {
+  sendBotMessage(workspaceId, message, ws, wss);
 }
 
 

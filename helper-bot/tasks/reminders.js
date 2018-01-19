@@ -38,16 +38,16 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 	  let immediateBotMessageOnSuccess = `Got it, ${username}. I'm going to send you a reminder to ${task} ${timeText}.`;
 	  let timedBotMessageOnSuccess = `Yo ${username}, this is a reminder to ${task}.`;
 
-	  output.responder('reminders', workspaceId, immediateBotMessageOnSuccess, ws, wss);
+	  output.responder(workspaceId, immediateBotMessageOnSuccess, ws, wss);
   	setTimeout(() => {
-  		output.responder('reminders', workspaceId, timedBotMessageOnSuccess, ws, wss)
+  		output.responder(workspaceId, timedBotMessageOnSuccess, ws, wss)
   	}, timeOut * 1000);  
   } else if (timeOut > maxTimeOut) {
   	immediateBotMessageOnError = `Wow! Sorry ${username}, but I refuse to set reminders past 7 days. I simply will not do it.`;
-    output.responder('reminders', workspaceId, immediateBotMessageOnError, ws, wss);	
+    output.responder(workspaceId, immediateBotMessageOnError, ws, wss);	
 	} else {
 	  immediateBotMessageOnError = `Hey ${username}, I couldn't work out when you wanted me to remind you to ${task}. Please try again.`;
-  	output.responder('reminders', workspaceId, immediateBotMessageOnError, ws, wss);
+  	output.responder(workspaceId, immediateBotMessageOnError, ws, wss);
   }
 };
 

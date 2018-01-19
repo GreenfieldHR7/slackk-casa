@@ -44,7 +44,7 @@ const requester = (options, workspaceId, ws, wss) => {
         news += article.title;
       }
 
-      output.responder('news', workspaceId, news, ws, wss);
+      output.responder(workspaceId, news, ws, wss);
     }
   });
 }
