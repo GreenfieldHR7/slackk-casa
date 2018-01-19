@@ -37,7 +37,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   	} else {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash 2 hours"';
   	  
-  	  //invoke error handler
+  	  //invoke error handler -- wire this up to responder
   	  console.log(errorMessage);
   	}
   } else if (text.indexOf('news') > -1 || text.indexOf('stories') > -1) {
@@ -55,7 +55,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   } else {
   	errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders and fetching the latest news';
   	
-  	//invoke error handler
+  	//invoke error handler -- connect this to NLP API**
   	console.log(errorMessage);
   }
 }

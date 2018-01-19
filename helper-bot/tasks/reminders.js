@@ -33,7 +33,8 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 
 	//at 5pm
   } else if (timeText.indexOf('at') > -1) {
-  	//timeOut = at_Handler.timeOutCalculator(timeText);
+  	//NEED TO DEBUG**************
+  	timeOut = at_Handler.timeOutCalculator(timeText);
 
 	//on Sunday
   } else if (timeText.indexOf('on') > -1) {
