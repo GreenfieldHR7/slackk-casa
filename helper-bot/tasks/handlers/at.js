@@ -1,12 +1,11 @@
 
-//will not handle a request in the same minute
 const timeOutCalculator = (timeText) => {
-	let currentTime = Date().toString().split(' ')[4]; //'18:40:45'
-	let currentTimeSegmented = currentTime.split(':'); //['18', '40', '45']
+	let currentTime = Date().toString().split(' ')[4];
+	let currentTimeSegmented = currentTime.split(':');
 	
-	let inputTime = timeText.split(' ').slice(timeText.split(' ').length - 1)[0]; //'11' or '11:00'
-	let inputTimeHasMinutes = inputTime.indexOf(':') > -1; //true or false
-	let inputMeridiem = inputTime.slice(inputTime.length - 2); //'pm', 'am', or number
+	let inputTime = timeText.split(' ').slice(timeText.split(' ').length - 1)[0];
+	let inputTimeHasMinutes = inputTime.indexOf(':') > -1;
+	let inputMeridiem = inputTime.slice(inputTime.length - 2);
 	
 	let inputHour = 0;
 	let inputMinute = 0;
@@ -43,7 +42,7 @@ const timeOutCalculator = (timeText) => {
 	let inputSecondDifferenceToCurrent;
 	
 	if (inputHour > currentHour) {
-	  if (inputMinute >= currentMinute) {
+	  if (inputMinute > currentMinute) {
 	    inputHourDifferenceToCurrent = inputHour - currentHour;
 	    
 	    if (currentSecond === 0) {
@@ -53,6 +52,10 @@ const timeOutCalculator = (timeText) => {
 	      inputMinuteDifferenceToCurrent = inputMinute - currentMinute - 1;
 	      inputSecondDifferenceToCurrent = 60 - currentSecond;
 	    }
+	  } else if (inputMinute === currentMinute) { 
+	    inputHourDifferenceToCurrent = inputHour - currentHour;
+	    inputMinuteDifferenceToCurrent = 0;
+	    inputSecondDifferenceToCurrent = 0;
 	  } else {
 	    inputHourDifferenceToCurrent = inputHour - currentHour - 1;
 	    
@@ -65,7 +68,7 @@ const timeOutCalculator = (timeText) => {
 	    }
 	  }
 	} else if (inputHour === currentHour) {
-	  if (inputMinute >= currentMinute) {
+	  if (inputMinute > currentMinute) {
 	    inputHourDifferenceToCurrent = inputHour - currentHour;
 	    
 	    if (currentSecond === 0) {
@@ -75,6 +78,10 @@ const timeOutCalculator = (timeText) => {
 	      inputMinuteDifferenceToCurrent = inputMinute - currentMinute - 1;
 	      inputSecondDifferenceToCurrent = 60 - currentSecond;
 	    }
+	  } else if (inputMinute === currentMinute) { 
+	  	inputHourDifferenceToCurrent = 0;
+	  	inputMinuteDifferenceToCurrent = 0;
+	  	inputSecondDifferenceToCurrent = 0;
 	  } else {
 	    inputHourDifferenceToCurrent = 23;
 	    
@@ -86,8 +93,8 @@ const timeOutCalculator = (timeText) => {
 	      inputSecondDifferenceToCurrent = 60 - currentSecond;
 	    }
 	  }
-	} else {
-	  if (inputMinute >= currentMinute) {
+	} else if (inputHour < currentHour) {
+	  if (inputMinute > currentMinute) {
 	    inputHourDifferenceToCurrent = 24 - (currentHour - inputHour);
 	    
 	    if (currentSecond === 0) {
@@ -97,6 +104,10 @@ const timeOutCalculator = (timeText) => {
 	      inputMinuteDifferenceToCurrent = inputMinute - currentMinute - 1;
 	      inputSecondDifferenceToCurrent = 60 - currentSecond;
 	    }
+	  } else if (inputMinute === currentMinute) {
+	  	inputHourDifferenceToCurrent = 24 - (currentHour - inputHour);
+	  	inputMinuteDifferenceToCurrent = 0;
+	  	inputSecondDifferenceToCurrent = 0;
 	  } else {
 	    inputHourDifferenceToCurrent = 24 - (currentHour - inputHour) - 1;
 	    
