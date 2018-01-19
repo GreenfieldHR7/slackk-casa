@@ -74,7 +74,17 @@ const onMessage = async (ws, wss, data) => {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
       }
-      case 'POSTMESSAGE':
+    case 'GETDIRECTMESSAGES':
+    // method GETDIRECTMESSAGES returns a list of previous messages for the given privateChannelId
+      try {
+        const messages = await db.getDirectMessages(Number(message.data.privateChannelId));
+        // respond back to client with success response and list of messages if successfully pulled from database
+        return ws.send(response(200, 'Request success', message.method, messages));
+      } catch (err) {
+        // respond back to client with error response and error message if messages can't be pulled from database
+        return ws.send(response(400, err.stack, message.method));
+      }    
+    case 'POSTMESSAGE':
     // method POSTMESSAGE posts a message to the workspace for the given workspaceId
     /*
     Request from client to server:
@@ -146,7 +156,7 @@ const onMessage = async (ws, wss, data) => {
       } catch (err) {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
-      }  
+      } 
     case 'GETMESSAGESOFUSER':
       try {
         const userMessages = await db.getMessagesOfUser(message.data.user, Number(message.data.workspaceId));
