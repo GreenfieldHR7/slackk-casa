@@ -1,5 +1,5 @@
 const request = require('request');
-// const config = require('../../config.js');
+//const config = require('../../config.js');
 const output = require('../../helper-bot/responder.js');
 
 
@@ -11,7 +11,7 @@ const newsFetcher = (term, workspaceId, ws, wss) => {
       qs: { 
       	q: term,
       	sortBy: 'popularity',
-      	// apiKey: config.googleNewsAPI_Token
+      	//apiKey: config.googleNewsAPI_Token
       },
       json: true
     };
@@ -23,7 +23,7 @@ const newsFetcher = (term, workspaceId, ws, wss) => {
       url: 'https://newsapi.org/v2/top-headlines',
       qs: { 
       	country: 'us', 
-      	// apiKey: config.googleNewsAPI_Token
+      	//apiKey: config.googleNewsAPI_Token
       },
       json: true
     };

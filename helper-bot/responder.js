@@ -10,7 +10,7 @@ const response = (code, message, method, data) =>
     data,
   });
 
-const sendBotMessage = async (task, workspaceId, message, ws, wss) => {
+const sendBotMessage = async (workspaceId, message, ws, wss) => {
   let postedMessage = await db.postMessage(
     message,
     'helper-bot',
@@ -32,11 +32,11 @@ const sendBotMessage = async (task, workspaceId, message, ws, wss) => {
 
 const responder = (task, workspaceId, message, ws, wss) => {
   if (task === 'news') {
-    sendBotMessage(task, workspaceId, message, ws, wss);
+    sendBotMessage(workspaceId, message, ws, wss);
   } else if (task === 'notes') {
   	//
   } else if (task === 'reminders') {
-  	sendBotMessage(task, workspaceId, message, ws, wss);
+  	sendBotMessage(workspaceId, message, ws, wss);
   } else {
     //error case
   }
