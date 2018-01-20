@@ -50,7 +50,26 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   	});
 	  news.newsFetcher(term, workspaceId, ws, wss);  
   } else if (text.indexOf('note') > -1 || text.indexOf('list') > -1 || text.indexOf('log') > -1) { 
-    if (text.indexOf('add') > -1 || text.indexOf('post') > -1) {
+    if (text.indexOf('add a') > -1 || text.indexOf('post a') > -1) {
+      let note = undefined;
+      let noteIndex = undefined;
+
+      words.forEach((word, index) => {
+        let lowerCaseWord = word.toLowerCase();
+        
+        if (lowerCaseWord === 'to') {
+          noteIndex = index;
+        }
+      });
+
+      if (noteIndex) {
+        note = words.slice(noteIndex + 1).join(' ');
+        notes.noteAdder(note, username, workspaceId, ws, wss);
+      } else {
+        errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add a note to pick up the groceries."';
+        output.responder(workspaceId, errorMessage, ws, wss);
+      }
+    } else if (text.indexOf('add') > -1 || text.indexOf('post') > -1) {
       let note = undefined;
       let noteIndex = undefined;
       let commandIndex = undefined;
@@ -108,6 +127,9 @@ module.exports = { interpreter };
 // /helper-bot add take out the trash to my notes
 // /helper-bot post take out the trash to my notes
 // /helper-bot post take out the trash to my log
+
+// /helper-bot add a note to take out the trash
+
 // -----------------
 // /helper-bot send me my notes
 // /helper-bot show me my notes
