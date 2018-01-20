@@ -70,6 +70,7 @@ export default class Body extends React.Component {
               usernames={usernames} 
               handleSelectedUser={handleSelectedUser}
               selectedUser={selectedUser}
+              currentWorkSpaceId={currentWorkSpaceId}
             />
             <Search 
               getMessagesByKeywords={getMessagesByKeywords}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer } from '../socketHelpers';
 import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
+import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage } from '../socketHelpers';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import Body from './Body.jsx';
@@ -68,11 +68,19 @@ export default class App extends React.Component {
     // on key press enter send message and reset text box
     if (event.charCode === 13 && !event.shiftKey) {
       event.preventDefault();
-      sendMessage({
-        username: this.props.location.state.username,
-        text: this.state.query,
-        workspaceId: this.state.currentWorkSpaceId,
-      });
+      if (this.state.currentWorkSpaceId !== '') {
+        sendMessage({
+          username: this.props.location.state.username,
+          text: this.state.query,
+          workspaceId: this.state.currentWorkSpaceId,
+        });        
+      } else {
+        sendDirectMessage({
+          username: this.props.location.state.username,
+          text: this.state.query,
+          privateChannelId: this.state.currentPrivateChannelId
+        });             
+      } 
       // resets text box to blank string
       this.setState({
         query: '',
@@ -81,6 +89,10 @@ export default class App extends React.Component {
   }
 
   handleSelectedUser(event) {
+    // if it's private channel, show all messages when click on refresh (search)
+    // if (currentPrivateChannelId !== '') {
+      
+    // }
     let currentWorkSpaceId = this.state.currentWorkSpaceId;
     // event.target.value is user when one was selected from option selection
     // event is this.selectedUser when one changes input in search textbox   
@@ -221,7 +233,7 @@ export default class App extends React.Component {
               className="message-input-box"
               type="textarea"
               name="text"
-              placeholder={`Message #${currentWorkSpaceName || 'select a workspace!'}`}
+              placeholder={`Message #${currentWorkSpaceName || 'select a workspace or or direct a message!'}`}
               onChange={event => this.handleChange(event)}
               onKeyPress={event => this.handleKeyPress(event)}
               onKeyDown={event => this.handleKeyDown(event)}

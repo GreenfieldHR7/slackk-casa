@@ -44,11 +44,11 @@ const postMessage = (message, username, workspaceId, poll) =>
       ));
 
 // post direct message to database
-const postDirectMessage = (message, username, directMessageId) => 
+const postDirectMessage = (message, username, directMessageId) =>  
   // pull privatechannel messages table name using directMessageId
   client
     .query(`SELECT db_name FROM privatechannels WHERE id = $1`, [directMessageId])
-    // post new message into workspace's messages table
+    // post new message into private channel's messages table
     .then(data =>
       client.query(
         'INSERT INTO $db_name (text, username) VALUES ($1, $2) RETURNING *'.replace(
@@ -198,5 +198,6 @@ module.exports = {
   getPrivateChannels,
   createPrivateChannel,
   getDirectMessages,
-  getAllUsers
+  getAllUsers,
+  postDirectMessage
 };

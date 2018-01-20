@@ -8,7 +8,6 @@ export default class PrivateChannelList extends React.Component {
 	super(props);
 	this.state = {
 		privateChannelQuery: '',
-	//	createFail: false,
 		allUsers: []
 	};
 	this.getPrivateChannelQuery = this.getPrivateChannelQuery.bind(this);
@@ -24,7 +23,6 @@ export default class PrivateChannelList extends React.Component {
   createPrivateChannel() {
     let { privateChannels, currentUser } = this.props;
     let { privateChannelQuery } = this.state;
-  //  this.setState({ createFail: false });
     if (privateChannelQuery.length > 0) {
     	if (this.isPrivateChannelOpen(privateChannelQuery, currentUser)) {
     		// alert 'private channel already open'
@@ -57,8 +55,10 @@ export default class PrivateChannelList extends React.Component {
       .then(resp => resp.json())
       .then(data => {
       	console.log(data);
-      	for (var i = 0; i < data.length; i++) {
+      	let found = false;
+      	for (var i = 0; i < data.length && !found; i++) {
       		if (data[i].username === otherUser) {
+      			found = true;
  				fetch('/privatechannels', {
         			method: 'POST',
         			body: JSON.stringify({ currUser: currentUser, otherUser: otherUser }),
@@ -66,19 +66,14 @@ export default class PrivateChannelList extends React.Component {
       			})
         		.then(resp => (resp.status === 201 ? loadPrivateChannels() : alert('Failed to load private channels')))
         		.catch(console.error);
-    		}	     			
+    		} else if (!found && i === data.length) {
+				alert(`There's no user ${otherUser}`);	
+    		}
       	} 
-//		this.setState({ createFail: true });
-		alert(`There's no user ${otherUser}`);	
       })
       .catch(console.error);
   }
-
-  //helper for createWorkSpace
-  // handleFail() {
-  //   this.setState({ createFail: false });
-  // }
-  	
+ 	
   render() {
   	let {
   		privateChannels,
@@ -90,7 +85,7 @@ export default class PrivateChannelList extends React.Component {
 	  <div>
 	    <Row>
           <Col>
-            <h3 className="workSpace-header"> Direct Messages </h3>{' '}
+            <h3 className="workSpace-header"> Privates! </h3>{' '}
           </Col>
           <Col className="mt-2">
             <CreatePrivateChannel
@@ -109,8 +104,7 @@ export default class PrivateChannelList extends React.Component {
 		  />)}
 	    <br />
         <br />
-{/*        {createFail ? <Alert color="danger"> Failed to create private channel </Alert> : undefined}
-*/}	  </div>
+	  </div>
 	)		
   }
 }

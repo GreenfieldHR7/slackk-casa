@@ -157,6 +157,35 @@ const onMessage = async (ws, wss, data) => {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
       } 
+
+    case 'POSTDIRECTMESSAGE':
+      try {
+        // post the given message to the database
+        let postedMessage = await db.postDirectMessage(
+          message.data.text,
+          message.data.username,
+          message.data.privateChannelId,
+        );
+        [postedMessage] = postedMessage.rows;
+        // send message to other user
+        // respond back to client with success response and list of messages if successfully posted to the database
+        ws.send(response(201, 'Post success', message.method, postedMessage))
+        // invoking already written function will update only one with same privateChannelId
+        return updateEveryoneElse(
+          ws,
+          wss,
+          response(200, 'New Direct message', 'NEWDIRECTMESSAGE', {
+            message: postedMessage,
+            privateChannelId: message.data.privateChannelId,
+          }),
+        );          
+      } catch (err) {
+        // respond back to client with error response and error message if messages can't be pulled from database
+        console.log(err)
+        return ws.send(response(400, err.stack, message.method));
+      } 
+
+
     case 'GETMESSAGESOFUSER':
       try {
         const userMessages = await db.getMessagesOfUser(message.data.user, Number(message.data.workspaceId));
