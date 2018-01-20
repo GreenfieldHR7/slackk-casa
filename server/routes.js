@@ -29,7 +29,6 @@ router.use(express.static(path.join(__dirname, '../client/dist')));
 router.get('/signup', reactRoute);
 router.get('/login', reactRoute);
 router.get('/messages', passport.authenticate('local', { failureRedirect: '/login' }), reactRoute);
-
 // POST request to /signup, used to register users
 /*
   Request object from client
@@ -145,5 +144,39 @@ router.post('/workspaces', async (req, res) => {
     return res.status(500).json(err.stack);
   }
 });
+
+const multer = require('multer');
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  // file size limitation in bytes
+  limits: { fileSize: 52428800 },
+});
+
+var AWS = require('aws-sdk');
+
+router.post('/aws/upload', upload.single('theseNamesMustMatch'), (req, res) => {
+  console.log(req.file)
+  // Create an S3 client
+  var s3 = new AWS.S3();
+  // Create a bucket and upload something into it
+  var bucketName = 'teamkevintaut';
+  var keyName = req.file.originalname;
+  s3.createBucket({Bucket: bucketName}, function() {
+    var params = {Bucket: bucketName, Key: keyName, Body: req.file.buffer, ACL: 'public-read'};
+    s3.putObject(params, function(err, data) {
+      if (err)
+        console.log(err)
+      else
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+        res.send(`https://s3-us-west-1.amazonaws.com/${bucketName}/${keyName}`)
+    });
+  });
+})
+
+
+
+
+
 
 module.exports = router;

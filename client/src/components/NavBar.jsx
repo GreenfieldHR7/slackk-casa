@@ -50,6 +50,9 @@ export default class NavBar extends React.Component {
                 <NavLink href="/login">
                   <DropdownItem>Sign Out</DropdownItem>
                 </NavLink>
+                  <NavLink href="/profile">
+                  <DropdownItem>Edit Profile</DropdownItem>
+                </NavLink>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>

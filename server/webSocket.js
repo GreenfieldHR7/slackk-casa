@@ -160,6 +160,18 @@ const onMessage = async (ws, wss, data) => {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
       }       
+      case "SENDTYPESTATUS":
+      try {
+        console.log('wb get the data', message);
+      //  ws.send(response(201, 'Typing Status Post success', message.method, message));
+        return updateEveryoneElse(
+          ws,
+          wss,
+          response(201, 'Typing Status Post success', message.method, message)
+        )
+      } catch (err) {
+          return ws.send(response(400, err.stack, message.method));
+      }
     default:
       // unknown message sent to server, respond back to client
       return ws.send(response(405, 'Unknown method', message.method));
