@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
-import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage } from '../socketHelpers';
+import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage, getPrivateChannelMessagesFromServer } from '../socketHelpers';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import Body from './Body.jsx';
@@ -90,19 +90,20 @@ export default class App extends React.Component {
 
   handleSelectedUser(event) {
     // if it's private channel, show all messages when click on refresh (search)
-    // if (currentPrivateChannelId !== '') {
-
-    // }
-    let currentWorkSpaceId = this.state.currentWorkSpaceId;
-    // event.target.value is user when one was selected from option selection
-    // event is this.selectedUser when one changes input in search textbox   
-    let username = event ? event.target.value : this.state.selectedUser; 
-    if (username === "All users") {
-        getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+    if (this.state.currentPrivateChannelId !== '') {
+      getPrivateChannelMessagesFromServer(this.state.currentPrivateChannelId);
     } else {
-      getMessagesOfUser(username, currentWorkSpaceId);
-    } 
-    this.setState( { selectedUser: username } );      
+      let currentWorkSpaceId = this.state.currentWorkSpaceId;
+      // event.target.value is user when one was selected from option selection
+      // event is this.selectedUser when one changes input in search textbox   
+      let username = event ? event.target.value : this.state.selectedUser; 
+      if (username === "All users") {
+          getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+      } else {
+        getMessagesOfUser(username, currentWorkSpaceId);
+      } 
+      this.setState( { selectedUser: username } );           
+    }
   }
 
   //grabs all existing workspaces
