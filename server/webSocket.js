@@ -170,7 +170,7 @@ const onMessage = async (ws, wss, data) => {
           response(201, 'Typing Status Post success', message.method, message)
         )
       } catch (err) {
-
+          return ws.send(response(400, err.stack, message.method));
       }
     default:
       // unknown message sent to server, respond back to client

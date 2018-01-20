@@ -168,7 +168,6 @@ const afterConnect = () => {
         loadUsers(serverResp.data);
         break;
       case 'SENDTYPESTATUS':
-      console.log('serverResp data is', serverResp.data)
         addTypeStatus(serverResp.data);
         break;
       default:

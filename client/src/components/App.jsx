@@ -32,11 +32,10 @@ export default class App extends React.Component {
       currentWorkSpaceName: '',
       selectedUser: 'All users', 
       workspaceMentioned: []
-      testimage: 'https://s3-us-west-1.amazonaws.com/teamkevintaut/testfile',
       popoverOpen: false,
       typer: '',
       typerWorkSpaceId: '',
-      renderTyping: false
+      renderTyping: false,
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
@@ -113,14 +112,15 @@ export default class App extends React.Component {
   //renders nav bar, body(which contains all message components other than input), and message input
   
   onDrop(files) {
+    //use upload to send file to server
       upload.post('/aws/upload')
       .attach('theseNamesMustMatch', files[0])
       .end((err, res) => {
         if (err) console.log(err);
-        console.log(res);
         console.log('File uploaded!');
         // send aws url (res) as text to web-sockets
         event.preventDefault();
+        // use sendMessage to send aws s3 url to websocket
         sendMessage({
           username: this.props.location.state.username,
           text: res.text,
@@ -144,7 +144,13 @@ export default class App extends React.Component {
 
   render() {
     let {
+<<<<<<< HEAD
       messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned,
+||||||| merged common ancestors
+      messages, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, testimage
+=======
+      messages, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, testimage, popoverOpen
+>>>>>>> add upload file, see who is typing and wrap the message from the same user
     } = this.state;
     return (
       <div className="app-container">
@@ -177,10 +183,10 @@ export default class App extends React.Component {
               onKeyPress={event => this.handleKeyPress(event)}
               onKeyDown={event => this.handleKeyDown(event)}
             />
-          </div>
+          </div> 
           <div className="upload-file-button">
             <Button className="upload-button" id="Popover2" onClick={this.toggleTwo} color="success">+</Button>
-            <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover2" toggleTwo={this.toggleTwo}>
+            <Popover placement="bottom" isOpen={popoverOpen} target="Popover2" toggleTwo={this.toggleTwo}>
               <PopoverHeader>Upload File</PopoverHeader>
               <PopoverBody>
                 <Dropzone onDrop={this.onDrop}>
