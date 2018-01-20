@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Media } from 'reactstrap';
+import Poll from './Poll.jsx'
 
 //Individual message container
 export default class extends React.Component {
@@ -64,6 +65,13 @@ export default class extends React.Component {
         marginRight: '7px',
       },
     };
+    console.log('client message', message);
+
+    let poll = '';
+    if (message.poll) {
+      const parsedPoll = JSON.parse(message.poll);
+      poll = <Poll data={parsedPoll} />
+    }
 
     return (
       <div className="message-entry-container">
@@ -83,6 +91,7 @@ export default class extends React.Component {
           </span>
           <div style={styles.message}>{message.text}</div>
         </Container>
+        {poll}
       </div>
     );
   }

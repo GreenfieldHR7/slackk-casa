@@ -27,7 +27,8 @@ export default class App extends React.Component {
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
       selectedUser: 'All users', 
-      workspaceMentioned: []
+      workspaceMentioned: [],
+      poll: []
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);

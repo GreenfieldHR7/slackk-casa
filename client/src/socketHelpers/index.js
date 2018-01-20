@@ -106,7 +106,8 @@ const filterMsgByWorkSpace = (msg) => {
   } else {
     beep.play();
   }
-  
+
+  console.log(msg.message);
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }
@@ -116,7 +117,6 @@ const filterMsgByWorkSpace = (msg) => {
 const afterConnect = () => {
   ws.onmessage = (event) => {
     let serverResp = JSON.parse(event.data);
-
     // TODO: better error handling. Temp till complete switch statements
     if (serverResp.code === 400) {
       console.log(serverResp.method);

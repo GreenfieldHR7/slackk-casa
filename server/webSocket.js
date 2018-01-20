@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 
 const db = require('../database');
 const bot = require('../helper-bot/interpreter.js');
-
+const helper = require('./socketHelpers')
 // creates a response object for sending to clients
 /*
 Object used for communication between server and clients through WebSockets -
@@ -106,11 +106,13 @@ const onMessage = async (ws, wss, data) => {
           bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
         }
 
+        message.data.poll = helper.checkPoll(message.data.text);
         // post the given message to the database
         let postedMessage = await db.postMessage(
           message.data.text,
           message.data.username,
           message.data.workspaceId,
+          message.data.poll,
         );
         [postedMessage] = postedMessage.rows;
         // respond back to client with success response and list of messages if successfully posted to the database
