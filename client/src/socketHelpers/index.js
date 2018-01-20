@@ -174,18 +174,20 @@ const filterMsgByPrivateChannel = (msg) => {
   } else {
     beep.play();
   }
-  let privateChannels = app.state.privateChannels;
-  for (let i = 0; i < privateChannels.length; i++) {
-    if (privateChannels[i].id === msg.privateChannelId) {
-      if (msg.privateChannelId === app.state.currentPrivateChannelId) {
-        // user got message at current private channel
-        app.setState({ messages: [...app.state.messages, msg.message] });        
-      } else {
-        console.log(msg.message);
-        alert(`${msg.message.username} sent you a new message`);
-      }
-    }
-  }
+  // app.loadPrivateChannels();  // sending message to new user which isn't in privateChannels state yet
+  // let privateChannels = app.state.privateChannels;
+  // for (let i = 0; i < privateChannels.length; i++) {
+  //   if (privateChannels[i].id === msg.privateChannelId) {
+  //     if (msg.privateChannelId === app.state.currentPrivateChannelId) {
+  //       // user got message at current private channel
+  //       app.setState({ messages: [...app.state.messages, msg.message] });        
+  //     } else {
+  //       alert(`${msg.message.username} sent you a new message`);
+  //     }
+  //   }
+  // }
+  app.loadPrivateChannels(msg)  // sending message to new user which isn't in privateChannels state yet
+ 
 }
 
 
