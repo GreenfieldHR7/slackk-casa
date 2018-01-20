@@ -91,7 +91,7 @@ export default class App extends React.Component {
   handleSelectedUser(event) {
     // if it's private channel, show all messages when click on refresh (search)
     // if (currentPrivateChannelId !== '') {
-      
+
     // }
     let currentWorkSpaceId = this.state.currentWorkSpaceId;
     // event.target.value is user when one was selected from option selection
@@ -113,10 +113,27 @@ export default class App extends React.Component {
       .catch(console.error);
   }
 
-  loadPrivateChannels() {
+  // if msg isn't undefined, receives message to client from other user
+  loadPrivateChannels(msg) {
     fetch(`/privatechannels/${this.props.location.state.username}`)
       .then(resp => resp.json())
-      .then(privateChannels => this.setState({ privateChannels }))
+//      .then(privateChannels => this.setState({ privateChannels }))
+      .then(privateChannels => {
+        this.setState({ privateChannels })
+        if (msg) {
+          let privateChannels = this.state.privateChannels;
+            for (let i = 0; i < privateChannels.length; i++) {
+              if (privateChannels[i].id === msg.privateChannelId) {
+                if (msg.privateChannelId === this.state.currentPrivateChannelId) {
+                  // user got message at current private channel
+                  this.setState({ messages: [...app.state.messages, msg.message] });        
+                } else {
+                  alert(`${msg.message.username} sent you a new message`);
+                }
+              }
+            }         
+        }
+      })
       .catch(console.error);
   }
 
