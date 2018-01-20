@@ -231,11 +231,20 @@ const afterConnect = () => {
       case 'GETUSERSINCHANNEL':
         loadUsers(serverResp.data);
         break;
+<<<<<<< HEAD
       case 'UPDATEPOLL':
         loadMessages(serverResp.data);
         break;
       case 'SENDTYPESTATUS':
         addTypeStatus(serverResp.data);
+=======
+      case 'SENDTYPESTATUS':
+        addTypeStatus(serverResp.data);
+        break;
+      // new direct message from other user
+      case 'NEWDIRECTMESSAGE':
+        filterMsgByPrivateChannel(serverResp.data);
+>>>>>>> Merge
         break;
       default:
     }
