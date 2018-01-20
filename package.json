@@ -69,6 +69,8 @@
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
     "superagent": "^3.8.2",
+    "request-promise": "^4.2.2",
+    "textrazor": "^2.1.0",
     "ws": "^4.0.0"
   },
   "babel": {

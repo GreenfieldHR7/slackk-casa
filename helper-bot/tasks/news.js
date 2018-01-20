@@ -37,14 +37,15 @@ const requester = (options, workspaceId, ws, wss) => {
     if (error) {
       console.error(error);
     } else {
-      let news = '';
+      let news = [];
 
       for (let i = 0; i < 10; i++) {
         let article = body.articles[i];
-        news += article.title;
+        news.push(article.title);
       }
 
-      output.responder('news', workspaceId, news, ws, wss);
+      let newsMessage = news.join('; ');
+      output.responder(workspaceId, newsMessage, ws, wss);
     }
   });
 }
