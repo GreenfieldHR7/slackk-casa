@@ -19,7 +19,7 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
   } else if (timeText.indexOf('tomorrow') > -1 && timeText.indexOf('at') > -1) {
   	timeOut = tomorrowAt_Handler.timeOutCalculator(timeText);
   } else if (timeText.indexOf('next') > -1 && timeText.indexOf('at') > -1) {
-  	timeOut = onAt_Handler.timeOutCalculator(timeText); //next Tuesday -- treats this as the next upcoming Tuesday (e.g. saying next Tuesday on Monday would equate to tomorrow)
+  	timeOut = onAt_Handler.timeOutCalculator(timeText); //**1
   } else if (timeText.indexOf('in') > -1) {
   	timeOut = in_Handler.timeOutCalculator(timeText);
   } else if (timeText.indexOf('at') > -1) {
@@ -29,7 +29,7 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
   } else if (timeText.indexOf('tomorrow') > -1) {
   	timeOut = tomorrow_Handler.timeOutCalculator(timeText);
   } else if (timeText.indexOf('next') > -1) {
-  	timeOut = next_Handler.timeOutCalculator(timeText); //next Tuesday -- treats this as the next upcoming Tuesday (e.g. saying next Tuesday on Monday would equate to tomorrow)
+  	timeOut = next_Handler.timeOutCalculator(timeText); //**1
   } else {
   	timeOut = undefined;
   }
@@ -54,12 +54,4 @@ const reminderMaker = (task, timeText, username, workspaceId, ws, wss) => {
 
 module.exports = {reminderMaker};
 
-// VALID INPUT FORMATS
-// /helper-bot remind me to brush my teeth in 60 seconds
-// /helper-bot remind me to brush my teeth in 2 minutes
-// /helper-bot remind me to brush my teeth in 3 hours
-
-// /helper-bot remind me to take out the trash on Sunday
-// /helper-bot remind me to take out the trash at 5pm
-// /helper-bot remind me to take out the trash tomorrow at 5pm
-// /helper-bot remind me to take out the trash next week
+//**1: next Tuesday -- treats this as the next upcoming Tuesday (e.g. saying next Tuesday on Monday would equate to tomorrow)

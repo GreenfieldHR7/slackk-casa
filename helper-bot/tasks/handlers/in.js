@@ -24,8 +24,8 @@ const timeOutCalculator = (timeText) => {
 };
 
 const timeTable = {
-	second: 1,
-	minute: 60,
+	sec: 1,
+	min: 60,
 	hour: 60 * 60,
 	day: 60 * 60 * 24
 };

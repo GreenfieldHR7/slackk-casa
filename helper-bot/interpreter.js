@@ -1,9 +1,9 @@
 const output = require('./responder.js');
 
+const meanings = require('./tasks/meanings.js');
 const news = require('./tasks/news.js');
 const notes = require('./tasks/notes.js');
 const reminders = require('./tasks/reminders.js');
-const meanings = require('./tasks/meanings.js');
 
 
 const interpreter = (text, username, workspaceId, ws, wss) => {
@@ -66,7 +66,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
         note = words.slice(noteIndex + 1).join(' ');
         notes.noteAdder(note, username, workspaceId, ws, wss);
       } else {
-        errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add a note to pick up the groceries."';
+        errorMessage = `Hmm. I didn't quite get that. Try something like "/helper-bot add a note to pick up the groceries."`;
         output.responder(workspaceId, errorMessage, ws, wss);
       }
     } else if (text.indexOf('add') > -1 || text.indexOf('post') > -1) {
@@ -92,13 +92,13 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
         note = words.slice(noteIndex + 1, commandIndex).join(' ');
         notes.noteAdder(note, username, workspaceId, ws, wss);
       } else {
-        errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add pick up the groceries to my to-do list."';
+        errorMessage = `Hmm. I didn't quite get that. Try something like "/helper-bot add pick up the groceries to my to-do list."`;
         output.responder(workspaceId, errorMessage, ws, wss);
       }
     } else if (text.indexOf('send') > -1 || text.indexOf('show') > -1) {
       notes.notesFetcher(username, workspaceId, ws, wss);
     } else {
-      errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot add something to my notes" or "/helper-bot send me my to-do list."';
+      errorMessage = `Hmm. I didn't quite get that. Try something like "/helper-bot add something to my notes" or "/helper-bot send me my to-do list."`;
       output.responder(workspaceId, errorMessage, ws, wss);
     }
   } else {
@@ -107,33 +107,5 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
 }
 
 
-module.exports = { interpreter };
-
-// VALID INPUT FORMATS
-
-// /helper-bot remind me to take out the trash tomorrow at 5pm
-// /helper-bot remind me to pack later today
-// /helper-bot remind me to pack later next week
-// /helper-bot remind me to brush my teeth in 60 seconds
-// /helper-bot remind me to take out the trash on Sunday
-// /helper-bot remind aaaaahhhhhhh!
-
-// /helper-bot send me stories about cats
-// /helper-bot send me news on cats
-// /helper-bot send me stories about cats
-// /helper-bot send me news
-
-// /helper-bot add take out the trash to my to do list
-// /helper-bot add take out the trash to my notes
-// /helper-bot post take out the trash to my notes
-// /helper-bot post take out the trash to my log
-
-// /helper-bot add a note to take out the trash
-
-// -----------------
-// /helper-bot send me my notes
-// /helper-bot show me my notes
-// /helper-bot send me my to do list
-
-// /helper-bot aaaahhhh!
+module.exports = {interpreter};
 
