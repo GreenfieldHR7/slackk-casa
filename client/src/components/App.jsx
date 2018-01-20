@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer } from '../socketHelpers';
-import { Input } from 'reactstrap';
 import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
@@ -31,7 +30,7 @@ export default class App extends React.Component {
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
       selectedUser: 'All users', 
-      workspaceMentioned: []
+      workspaceMentioned: [],
       popoverOpen: false,
       typer: '',
       typerWorkSpaceId: '',
@@ -144,13 +143,7 @@ export default class App extends React.Component {
 
   render() {
     let {
-<<<<<<< HEAD
-      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned,
-||||||| merged common ancestors
-      messages, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, testimage
-=======
-      messages, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, testimage, popoverOpen
->>>>>>> add upload file, see who is typing and wrap the message from the same user
+      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned, popoverOpen,
     } = this.state;
     return (
       <div className="app-container">
