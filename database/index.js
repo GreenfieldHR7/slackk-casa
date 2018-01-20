@@ -29,18 +29,18 @@ const initializeDB = () => {
 };
 
 // post message to database
-const postMessage = (message, username, workspaceId) =>
+const postMessage = (message, username, workspaceId, poll) =>
   // pull workspace messages table name using workspaceId
   client
     .query('SELECT db_name FROM workspaces WHERE id = $1', [workspaceId])
     // post new message into workspace's messages table
     .then(data =>
       client.query(
-        'INSERT INTO $db_name (text, username) VALUES ($1, $2) RETURNING *'.replace(
+        'INSERT INTO $db_name (text, username, poll) VALUES ($1, $2, $3) RETURNING *'.replace(
           '$db_name',
           data.rows[0].db_name,
         ),
-        [message, username],
+        [message, username, poll],
       ));
 
 // get messages for workspace from database
@@ -114,6 +114,23 @@ if (process.env.INITIALIZEDB) {
     .catch(err => console.error('error creating database tables, ', err.stack));
 }
 
+const updatePollOption = (pollData) => {
+  client.query(`SELECT workspaces.db_name FROM workspaces WHERE id = ($1)`, [pollData.workspaceId])
+    .then((data) => {
+      const db_name = data.rows[0].db_name;
+      const stringifiedData = JSON.stringify(pollData.data);
+      client.query(`UPDATE $db_name SET poll = $1 WHERE id = ($2)`.replace('$db_name', db_name), [stringifiedData, pollData.messageId])
+        .then((data) => {
+          data.rows;
+        })
+        .catch((err) => {
+          console.error('ERROR:', err);
+        })
+    })
+    .catch((err) => {
+      console.error('ERROR:', err);
+    })
+}
 module.exports = {
   client,
   initializeDB,
@@ -127,4 +144,5 @@ module.exports = {
   getPasswordHint,
   getMessagesOfUser,
   getUsersInChannel,
+  updatePollOption,
 };

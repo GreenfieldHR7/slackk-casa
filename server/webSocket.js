@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 
 const db = require('../database');
 const bot = require('../helper-bot/interpreter.js');
-
+const helper = require('./socketHelpers')
 // creates a response object for sending to clients
 /*
 Object used for communication between server and clients through WebSockets -
@@ -103,11 +103,13 @@ const onMessage = async (ws, wss, data) => {
       try {
         // check for bot request
 
+        message.data.poll = helper.checkPoll(message.data.text);
         // post the given message to the database
         let postedMessage = await db.postMessage(
           message.data.text,
           message.data.username,
           message.data.workspaceId,
+          message.data.poll,
         );
         [postedMessage] = postedMessage.rows;
         // respond back to client with success response and list of messages if successfully posted to the database
@@ -161,7 +163,20 @@ const onMessage = async (ws, wss, data) => {
       } catch (err) {
         // respond back to client with error response and error message if messages can't be pulled from database
         return ws.send(response(400, err.stack, message.method));
-      }       
+      }    
+    case 'UPDATEPOLL':
+      //responds to all clients with updated poll and updates database
+      try {
+        const updatedPollOption = await db.updatePollOption(message.data);
+        const messages = await db.getMessages(Number(message.data.workspaceId))
+        return updateEveryoneElse(
+          ws,
+          wss,
+          response(200, 'updated poll', 'UPDATEPOLL', messages)
+        );
+      } catch (err) {
+        return ws.send(response(400, err.stack, message.method));
+      }  
       case "SENDTYPESTATUS":
       try {
         console.log('wb get the data', message);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Media } from 'reactstrap';
+import Poll from './Poll.jsx'
 
 //Individual message container
 export default class extends React.Component {
@@ -14,7 +15,7 @@ export default class extends React.Component {
     this.setState({ toggleHover: !this.state.toggleHover });
   }
   render() {
-    const { message, lastmessage } = this.props;
+    const { message, currentUser, currentWorkSpaceId, lastmessage } = this.props;
     const lastMessageTime = new Date(lastmessage===undefined ? 0 : lastmessage.createdAt)
     const currentMessageTime = new Date(message.createdAt)
     //for the color changing avatars
@@ -68,6 +69,12 @@ export default class extends React.Component {
       },
     };
 
+    let poll = '';
+    if (message.poll) {
+      const parsedPoll = JSON.parse(message.poll);
+      poll = <Poll data={parsedPoll} currentUser={currentUser} currentWorkSpaceId={currentWorkSpaceId} messageId={message.id} />
+    }
+
     return (
       <div className="message-entry-container">
       {this.state.sameUser && currentMessageTime - lastMessageTime < 60000 ? 
@@ -89,6 +96,7 @@ export default class extends React.Component {
           <div style={styles.message}>{ message.text.includes('https://s3-us-west-1.amazonaws.com/teamkevintaut') ?  <a href={message.text} >{message.text} <img src={message.text} /> </a> : message.text }</div>
         </Container>)
       }
+        {poll}
       </div>
     );
   }

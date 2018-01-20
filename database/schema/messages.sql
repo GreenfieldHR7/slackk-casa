@@ -3,6 +3,7 @@
 	"text" varchar(1024) NOT NULL,
   "username" varchar(1024) NOT NULL,
   "createdAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+  "poll" varchar(2048) NULL,
 	CONSTRAINT $1_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

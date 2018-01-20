@@ -93,7 +93,24 @@
 .filter-messages {
   float: right;
 }
+
+.poll-image {
+  float: left;
+  width: 150px;
+  height: 100px;
+}
+
+.poll-title {
+  margin-left: 167px;
+  font-weight: bold;
+}
+
+.poll-data {
+  margin-left: 167px;
+}
+
 .typing-alert {
   margin-left: 25vh;
 }
+
 

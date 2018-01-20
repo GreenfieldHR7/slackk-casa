@@ -31,6 +31,7 @@ export default class App extends React.Component {
       currentWorkSpaceName: '',
       selectedUser: 'All users', 
       workspaceMentioned: [],
+      poll: [],
       popoverOpen: false,
       typer: '',
       typerWorkSpaceId: '',

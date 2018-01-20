@@ -38,6 +38,7 @@ export default class WorkSpaceEntry extends Component {
       const mention = workspaceMentioned[i];
       if (mention.usersMentioned.names.includes(currentUser) || mention.usersMentioned.names.includes('channel')) {
         if (!mention.usersMentioned.isNotified) {
+          console.log('yes this is working');
           const notification = new Notification(mention.notificationMessage);
           mention.usersMentioned.isNotified = true;
         }
