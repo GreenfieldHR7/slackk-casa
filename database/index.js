@@ -1,6 +1,8 @@
 const { Client } = require('pg');
 const path = require('path');
 const fs = require('fs');
+//const conString = "pg://localhost:5432/postgres";
+const conString = "postgres://localhost:5432/postgres";
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres'

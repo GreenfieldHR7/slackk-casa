@@ -1,6 +1,7 @@
 let ws = null;
 let app = null;
 let sent = false;
+let sentType = false;
 const beep = new Audio('/sounds/pling.wav'); // sound on receive msg
 const oneup = new Audio('/sounds/coin.wav'); // sound on send msg
 
@@ -56,6 +57,32 @@ const sendMessage = (data) => {
   ws.send(JSON.stringify(msg));
   getUsersInChannel(data.workspaceId);  // updates users select options
 };
+
+// send typing status to client
+let timer = null;
+const addTypeStatus = (message) => {
+  app.setState({
+    typer: message.data.username,
+    typerWorkSpaceId: message.data.workspaceId,
+    renderTyping: true
+  })
+  
+  if (timer) clearInterval(timer)
+  timer = setTimeout(() => app.setState({renderTyping: false}), 500)
+}
+
+// use keydown to track if the user is typing or not, pass username and workspaceid
+const sendTypeStatus = (data) => {
+  const msg = {
+    method: 'SENDTYPESTATUS',
+    data: {
+      username: data.username,
+      workspaceId: data.workspaceId,
+    },
+  };
+  sentType = true;
+  ws.send(JSON.stringify(msg));
+}
 
 // takes a workspace Id as INT for parameter and returns the messages for that current workspace
 const getWorkSpaceMessagesFromServer = (id) => {
@@ -139,6 +166,9 @@ const afterConnect = () => {
         break;
       case 'GETUSERSINCHANNEL':
         loadUsers(serverResp.data);
+        break;
+      case 'SENDTYPESTATUS':
+        addTypeStatus(serverResp.data);
         break;
       default:
     }

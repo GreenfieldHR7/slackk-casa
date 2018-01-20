@@ -6,7 +6,6 @@ import App from './components/App.jsx';
 import Home from './components/Home.jsx';
 import Signup from './components/Signup.jsx';
 import Login from './components/Login.jsx';
-
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 //Renders the dom. Route path tells the dom which component to render on which request.
