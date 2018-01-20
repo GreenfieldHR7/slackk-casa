@@ -234,7 +234,7 @@ export default class App extends React.Component {
           getMessagesByKeywords={this.getMessagesByKeywords}
           selectedUser={selectedUser}
           workspaceMentioned={workspaceMentioned}
-          currentUser={this.props.location.state.username}
+          currentUser={currentUser}
           loadPrivateChannels={() => this.loadPrivateChannels()}
           privateChannels={privateChannels}
           currentUser={currentUser}
