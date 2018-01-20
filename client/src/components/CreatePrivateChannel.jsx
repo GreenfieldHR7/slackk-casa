@@ -39,13 +39,13 @@ export default class CreatePrivateChannel extends React.Component {
   render() {
     return (
       <div>
-        <Button id="Popover1" onClick={this.toggle}>
+        <Button id="Popover2" onClick={this.toggle}>
           +
         </Button>
         <Popover
           placement="bottom"
           isOpen={this.state.popoverOpen}
-          target="Popover1"
+          target="Popover2"
           toggle={this.toggle}
         >
           <PopoverHeader>Enter username: </PopoverHeader>

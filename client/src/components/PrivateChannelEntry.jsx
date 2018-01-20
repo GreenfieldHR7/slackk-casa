@@ -59,7 +59,7 @@ export default class privateChannelEntry extends React.Component {
                 			className="workSpace-name workSpace-hover" 
                 			onClick={event => this.getDirectMessages(event)}>
                   	{' '}
-                  	# {otherUser}
+                  	* {otherUser}
                 	</h5>
        			)}
        		</div>
