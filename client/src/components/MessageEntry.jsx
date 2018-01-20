@@ -8,13 +8,16 @@ export default class extends React.Component {
     super(props);
     this.state = {
       toggleHover: false,
+      sameUser: (props.lastmessage===undefined ? false : props.message.username === props.lastmessage.username),
     };
   }
   toggleHover() {
     this.setState({ toggleHover: !this.state.toggleHover });
   }
   render() {
-    const { message, currentUser, currentWorkSpaceId } = this.props;
+    const { message, currentUser, currentWorkSpaceId, lastmessage } = this.props;
+    const lastMessageTime = new Date(lastmessage===undefined ? 0 : lastmessage.createdAt)
+    const currentMessageTime = new Date(message.createdAt)
     //for the color changing avatars
     let color = () => {
       let colors = [
@@ -74,7 +77,9 @@ export default class extends React.Component {
 
     return (
       <div className="message-entry-container">
-        <Container style={styles.body}>
+      {this.state.sameUser && currentMessageTime - lastMessageTime < 60000 ? 
+        (<div style={styles.message}>{ message.text.includes('https://s3-us-west-1.amazonaws.com/teamkevintaut') ?  <a href={message.text} >{message.text} <img src={message.text} /> </a> : message.text }</div>) :
+        (<Container style={styles.body}>
           <Media left href="#">
             <img
               className="egg img-responsive"
@@ -85,12 +90,13 @@ export default class extends React.Component {
             />
           </Media>
           <span style={styles.username}>
-            {message.username}
+            {message.username} 
             <span style={styles.timeStamp}>{new Date(message.createdAt).toLocaleTimeString()}</span>
           </span>
-          <div style={styles.message}>{message.text}</div>
-        </Container>
-        {poll }
+          <div style={styles.message}>{ message.text.includes('https://s3-us-west-1.amazonaws.com/teamkevintaut') ?  <a href={message.text} >{message.text} <img src={message.text} /> </a> : message.text }</div>
+        </Container>)
+      }
+        {poll}
       </div>
     );
   }

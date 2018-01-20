@@ -102,9 +102,6 @@ const onMessage = async (ws, wss, data) => {
     */
       try {
         // check for bot request
-        if (message.data.text.indexOf('/helper-bot') > -1) {
-          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
-        }
 
         message.data.poll = helper.checkPoll(message.data.text);
         // post the given message to the database
@@ -133,6 +130,11 @@ const onMessage = async (ws, wss, data) => {
           },
         }
         */
+        
+        if (message.data.text.indexOf('/helper-bot') > -1) {
+          bot.interpreter(message.data.text, message.data.username, message.data.workspaceId, ws, wss);
+        }
+
         return updateEveryoneElse(
           ws,
           wss,
@@ -175,6 +177,18 @@ const onMessage = async (ws, wss, data) => {
       } catch (err) {
         return ws.send(response(400, err.stack, message.method));
       }  
+      case "SENDTYPESTATUS":
+      try {
+        console.log('wb get the data', message);
+      //  ws.send(response(201, 'Typing Status Post success', message.method, message));
+        return updateEveryoneElse(
+          ws,
+          wss,
+          response(201, 'Typing Status Post success', message.method, message)
+        )
+      } catch (err) {
+          return ws.send(response(400, err.stack, message.method));
+      }
     default:
       // unknown message sent to server, respond back to client
       return ws.send(response(405, 'Unknown method', message.method));
