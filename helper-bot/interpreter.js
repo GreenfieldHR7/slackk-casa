@@ -3,6 +3,7 @@ const output = require('./responder.js');
 const news = require('./tasks/news.js');
 const notes = require('./tasks/notes.js');
 const reminders = require('./tasks/reminders.js');
+const meanings = require('./tasks/meanings.js');
 
 
 const interpreter = (text, username, workspaceId, ws, wss) => {
@@ -82,9 +83,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
       output.responder(workspaceId, errorMessage, ws, wss);
     }
   } else {
-  	//invoke error handler -- connect this to NLP API**
-    errorMessage = 'Hmm. I didn\'t quite get that. I can help with stuff like setting up reminders, creating to-do lists/ notes, and fetching the latest news.';
-    output.responder(workspaceId, errorMessage, ws, wss);
+    meanings.processTextWithNLP(text, workspaceId, ws, wss);
   }
 }
 
