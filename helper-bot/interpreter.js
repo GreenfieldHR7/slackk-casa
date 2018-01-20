@@ -38,7 +38,7 @@ const interpreter = (text, username, workspaceId, ws, wss) => {
   	  errorMessage = 'Hmm. I didn\'t quite get that. Try something like "/helper-bot remind me to take out the trash 2 hours."';
   	  output.responder(workspaceId, errorMessage, ws, wss);
   	}  
-  } else if (text.indexOf('news') > -1 || text.indexOf('stories') > -1) {
+  } else if (text.indexOf('news') > -1 || text.indexOf('stories') > -1 || text.indexOf('headlines') > -1) {
   	let term = undefined;
 
   	words.forEach((word, index) => {
