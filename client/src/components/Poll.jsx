@@ -7,7 +7,7 @@ class Poll extends React.Component {
 	}
 
 	render() {
-		let { data, currentUser } = this.props;
+		let { data, currentUser, currentWorkSpaceId, messageId } = this.props;
 		return (
 			<div>
 				<media>
@@ -21,7 +21,7 @@ class Poll extends React.Component {
 				<div className="poll-title">{data.name}</div>
 				<ol className="poll-data">
 					{data.options.map((option) => {
-						return <PollOption option={option} currentUser={currentUser}/>
+						return <PollOption option={option} currentUser={currentUser} currentWorkSpaceId={currentWorkSpaceId} messageId={messageId} data={data}/>
 					})}
 				</ol>
 			</div>

@@ -92,3 +92,6 @@ package-lock.json
 
 # webpack
 client/dist/bundle.js
+
+# config
+config.js

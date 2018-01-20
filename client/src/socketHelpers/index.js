@@ -73,6 +73,10 @@ const getMessagesOfUser = (user, workSpaceId) => {
   ws.send(JSON.stringify(msg));
 };
 
+const updatePoll = (data, workspaceId, messageId) => {
+  const msg = { method: 'UPDATEPOLL', data: { data, workspaceId, messageId } };
+  ws.send(JSON.stringify(msg));
+};
 // Looks at a message to see if a user was mentioned and returns users mentioned
 const getUsersMentioned = (msg) => {
   let potentialUsers = [];
@@ -142,6 +146,8 @@ const afterConnect = () => {
       case 'GETUSERSINCHANNEL':
         loadUsers(serverResp.data);
         break;
+      case 'UPDATEPOLL':
+        loadMessages(serverResp.data);
       default:
     }
   };
@@ -168,4 +174,4 @@ const connect = (server, component) => {
   });
 };
 
-export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer, getMessagesOfUser, getUsersInChannel };
+export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer, getMessagesOfUser, getUsersInChannel, updatePoll };

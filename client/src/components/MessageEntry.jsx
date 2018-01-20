@@ -14,7 +14,7 @@ export default class extends React.Component {
     this.setState({ toggleHover: !this.state.toggleHover });
   }
   render() {
-    const { message, currentUser } = this.props;
+    const { message, currentUser, currentWorkSpaceId } = this.props;
     //for the color changing avatars
     let color = () => {
       let colors = [
@@ -65,12 +65,11 @@ export default class extends React.Component {
         marginRight: '7px',
       },
     };
-    console.log('client message', message);
 
     let poll = '';
     if (message.poll) {
       const parsedPoll = JSON.parse(message.poll);
-      poll = <Poll data={parsedPoll} currentUser={currentUser}/>
+      poll = <Poll data={parsedPoll} currentUser={currentUser} currentWorkSpaceId={currentWorkSpaceId} messageId={message.id} />
     }
 
     return (
