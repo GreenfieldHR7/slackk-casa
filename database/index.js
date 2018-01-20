@@ -125,6 +125,9 @@ const updatePollOption = (pollData) => {
           console.error('ERROR:', err);
         })
     })
+    .catch((err) => {
+      console.error('ERROR:', err);
+    })
 }
 module.exports = {
   client,
