@@ -6,6 +6,20 @@
   right: 0px;
 }
 
+.waitingMessage {
+  height: 25px;
+  width: 25px;
+  text-align: center;
+  display: inline;
+  vertical-align: middle;
+  border-radius: 50%;  
+  background: red;
+  color: white;
+  float: right; 
+  font-size: 1em;
+  padding: 5px 0 5px 0;
+}
+
 /* left side  */
 .side-bar-col {
   margin-bottom: -100%;
@@ -113,4 +127,6 @@
   margin-left: 25vh;
 }
 
-
+#Popover2 {
+  float: right;
+}

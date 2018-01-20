@@ -23,6 +23,7 @@ export default class App extends React.Component {
           workspaceId: 0,
         },
       ],
+      waitingMessageInChannels: {},
       currentUser: '',
       users: [],
       usernames: [],
@@ -129,7 +130,10 @@ export default class App extends React.Component {
                   // user got message at current private channel
                   this.setState({ messages: [...this.state.messages, msg.message] });        
                 } else {
-                  alert(`${msg.message.username} sent you a new message`);
+                  // alert(`${msg.message.username} sent you a new message`);
+                  let waitingMessages = this.state.waitingMessageInChannels;
+                  waitingMessages[msg.privateChannelId] = waitingMessages[msg.privateChannelId] === undefined ? 1 : ++waitingMessages[msg.privateChannelId];
+                  this.setState({ waitingMessageInChannels: waitingMessages });
                 }
               }
             }         
@@ -214,7 +218,8 @@ export default class App extends React.Component {
       currentPrivateChannelName,
       currentUser,
       workspaceMentioned,
-      popoverOpen
+      popoverOpen,
+      waitingMessageInChannels
     } = this.state;
   //  let currUser = this.props.location.state.username;
     return (
@@ -239,7 +244,8 @@ export default class App extends React.Component {
           privateChannels={privateChannels}
           currentUser={currentUser}
           changeCurrentPrivateChannel={(id, otherUser) => this.changeCurrentPrivateChannel(id, otherUser)}
-          currentPrivateChannelId={currentPrivateChannelId} 
+          currentPrivateChannelId={currentPrivateChannelId}
+          waitingMessageInChannels={waitingMessageInChannels}
         />
         <div className="input-box">
           <div className="typing-alert">

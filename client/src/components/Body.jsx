@@ -30,7 +30,8 @@ export default class Body extends React.Component {
       loadPrivateChannels,
       currentUser, 
       changeCurrentPrivateChannel,
-      currentPrivateChannelId,    
+      currentPrivateChannelId, 
+      waitingMessageInChannels,   
     } = this.props;
 
     Notification.requestPermission().then(function(permission) {
@@ -60,7 +61,8 @@ export default class Body extends React.Component {
                 loadPrivateChannels={loadPrivateChannels}
                 currentUser={currentUser}
                 changeCurrentPrivateChannel={changeCurrentPrivateChannel}
-                currentPrivateChannelId={currentPrivateChannelId}                
+                currentPrivateChannelId={currentPrivateChannelId}
+                waitingMessageInChannels={waitingMessageInChannels}                
               />
             </Row>
           </Col>

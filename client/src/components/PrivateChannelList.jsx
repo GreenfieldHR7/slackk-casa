@@ -80,6 +80,7 @@ export default class PrivateChannelList extends React.Component {
   		currentUser,
   		changeCurrentPrivateChannel,
   		currentPrivateChannelId,
+  		waitingMessageInChannels,
   	} = this.props;
 	return (
 	  <div>
@@ -101,6 +102,7 @@ export default class PrivateChannelList extends React.Component {
 		  	currentUser={currentUser}
 		  	changeCurrentPrivateChannel={changeCurrentPrivateChannel}
             currentPrivateChannelId={currentPrivateChannelId}
+            waitingMessageInChannels={waitingMessageInChannels}
 		  />)}
 	    <br />
         <br />
