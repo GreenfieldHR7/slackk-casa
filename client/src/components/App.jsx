@@ -127,7 +127,7 @@ export default class App extends React.Component {
               if (privateChannels[i].id === msg.privateChannelId) {
                 if (msg.privateChannelId === this.state.currentPrivateChannelId) {
                   // user got message at current private channel
-                  this.setState({ messages: [...app.state.messages, msg.message] });        
+                  this.setState({ messages: [...this.state.messages, msg.message] });        
                 } else {
                   alert(`${msg.message.username} sent you a new message`);
                 }
