@@ -60,7 +60,7 @@ export default class Body extends React.Component {
               handleSelectedUser={handleSelectedUser}              
             />
           </div>
-            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId}/>
+            <MessageList messages={messages} currentWorkSpaceId={currentWorkSpaceId} currentUser={currentUser} />
           </Col>
         </Row>
       </Container>

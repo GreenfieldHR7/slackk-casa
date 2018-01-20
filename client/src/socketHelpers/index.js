@@ -107,7 +107,6 @@ const filterMsgByWorkSpace = (msg) => {
     beep.play();
   }
 
-  console.log(msg.message);
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }
