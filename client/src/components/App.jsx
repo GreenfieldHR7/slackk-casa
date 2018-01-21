@@ -67,7 +67,7 @@ export default class App extends React.Component {
   // only when shift+enter pressed breaks to new line
   handleKeyPress(event) {
     // on key press enter send message and reset text box
-    if (event.charCode === 13 && !event.shiftKey && this.state.query !== '') {
+    if (event.charCode === 13 && !event.shiftKey) {
       event.preventDefault();
       if (this.state.currentWorkSpaceId !== '') {
         sendMessage({
