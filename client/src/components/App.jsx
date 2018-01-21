@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
-import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage, getPrivateChannelMessagesFromServer } from '../socketHelpers';
+import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage, getPrivateChannelMessagesFromServer, sendTypeStatus } from '../socketHelpers';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import Body from './Body.jsx';
@@ -67,7 +67,7 @@ export default class App extends React.Component {
   // only when shift+enter pressed breaks to new line
   handleKeyPress(event) {
     // on key press enter send message and reset text box
-    if (event.charCode === 13 && !event.shiftKey) {
+    if (event.charCode === 13 && !event.shiftKey && this.state.query !== '') {
       event.preventDefault();
       if (this.state.currentWorkSpaceId !== '') {
         sendMessage({

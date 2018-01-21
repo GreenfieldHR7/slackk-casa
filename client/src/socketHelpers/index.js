@@ -157,12 +157,6 @@ const filterMsgByWorkSpace = (msg) => {
     beep.play();
   }
 
-  //notifies users in the mentioned workspace
-  const workspaceId = msg.workspaceId;
-  const usersMentioned = getUsersMentioned(msg.message.text);
-  const notificationMessage = `New mention from ${msg.message.username}`;
-  app.setState({ workspaceMentioned: [...app.state.workspaceMentioned, { usersMentioned, workspaceId, notificationMessage }] });
-
   if (msg.workspaceId === app.state.currentWorkSpaceId) {
     app.setState({ messages: [...app.state.messages, msg.message] });
   }
@@ -174,18 +168,7 @@ const filterMsgByPrivateChannel = (msg) => {
   } else {
     beep.play();
   }
-  // app.loadPrivateChannels();  // sending message to new user which isn't in privateChannels state yet
-  // let privateChannels = app.state.privateChannels;
-  // for (let i = 0; i < privateChannels.length; i++) {
-  //   if (privateChannels[i].id === msg.privateChannelId) {
-  //     if (msg.privateChannelId === app.state.currentPrivateChannelId) {
-  //       // user got message at current private channel
-  //       app.setState({ messages: [...app.state.messages, msg.message] });        
-  //     } else {
-  //       alert(`${msg.message.username} sent you a new message`);
-  //     }
-  //   }
-  // }
+
   app.loadPrivateChannels(msg)  // sending message to new user which isn't in privateChannels state yet
  
 }
@@ -231,20 +214,11 @@ const afterConnect = () => {
       case 'GETUSERSINCHANNEL':
         loadUsers(serverResp.data);
         break;
-<<<<<<< HEAD
       case 'UPDATEPOLL':
         loadMessages(serverResp.data);
         break;
       case 'SENDTYPESTATUS':
         addTypeStatus(serverResp.data);
-=======
-      case 'SENDTYPESTATUS':
-        addTypeStatus(serverResp.data);
-        break;
-      // new direct message from other user
-      case 'NEWDIRECTMESSAGE':
-        filterMsgByPrivateChannel(serverResp.data);
->>>>>>> Merge
         break;
       default:
     }
@@ -283,10 +257,7 @@ export {
   getMessagesOfUser, 
   getUsersInChannel,
   getPrivateChannelMessagesFromServer,
-<<<<<<< HEAD
-  updatePoll
+  updatePoll,
+  sendDirectMessage,
+  sendTypeStatus
 };
-=======
-  sendDirectMessage
-};
->>>>>>> Implement post direct message live

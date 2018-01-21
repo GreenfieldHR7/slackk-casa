@@ -54,7 +54,6 @@ export default class PrivateChannelList extends React.Component {
   	fetch('/users')  
       .then(resp => resp.json())
       .then(data => {
-      	console.log(data);
       	let found = false;
       	for (var i = 0; i < data.length && !found; i++) {
       		if (data[i].username === otherUser) {
@@ -66,7 +65,7 @@ export default class PrivateChannelList extends React.Component {
       			})
         		.then(resp => (resp.status === 201 ? loadPrivateChannels() : alert('Failed to load private channels')))
         		.catch(console.error);
-    		} else if (!found && i === data.length) {
+    		} else if (!found && i === data.length - 1) {
 				alert(`There's no user ${otherUser}`);	
     		}
       	} 

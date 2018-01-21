@@ -31,7 +31,6 @@ const initializeDB = () => {
 // post message to database
 const postMessage = (message, username, workspaceId, poll) =>
   // pull workspace messages table name using workspaceId
-<<<<<<< HEAD
   client
     .query('SELECT db_name FROM workspaces WHERE id = $1', [workspaceId])
     // post new message into workspace's messages table
