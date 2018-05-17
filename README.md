@@ -25,7 +25,7 @@
 
 ## Demo
 
-Try it here: [slackk-casa](https://slackk-casa.herokuapp.com)
+Try it here: [slackk-casa](https://slackk.herokuapp.com/)
 
 ## Usage
 
