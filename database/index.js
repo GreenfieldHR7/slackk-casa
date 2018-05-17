@@ -5,8 +5,10 @@ const fs = require('fs');
 const conString = "postgres://localhost:5432/postgres";
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres'
+//  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres'
   //ssl: true,
+  connectionString: process.env.DATABASE_URL || 'ec2-50-19-224-165.compute-1.amazonaws.com:5432/dcqaar3fqb9mru'
+  ssl: true,
 });
 
 client
