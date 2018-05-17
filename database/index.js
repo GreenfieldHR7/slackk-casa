@@ -7,7 +7,8 @@ const conString = "postgres://localhost:5432/postgres";
 const client = new Client({
 //  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres'
   //ssl: true,
-  connectionString: process.env.DATABASE_URL || 'postgres://wetpkzdttjfeuj:dcedd87d856efcc6046f7acb43999b55f064179e18ba6e4ab405027b3eec1d51@ec2-50-19-224-165.compute-1.amazonaws.com:5432/dcqaar3fqb9mru'
+  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres',
+  //'postgres://wetpkzdttjfeuj:dcedd87d856efcc6046f7acb43999b55f064179e18ba6e4ab405027b3eec1d51@ec2-50-19-224-165.compute-1.amazonaws.com:5432/dcqaar3fqb9mru',
 });
 
 client
