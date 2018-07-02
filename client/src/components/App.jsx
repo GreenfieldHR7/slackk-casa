@@ -1,8 +1,22 @@
 import React from 'react';
-import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
-import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer, sendDirectMessage, getPrivateChannelMessagesFromServer, sendTypeStatus } from '../socketHelpers';
+import { 
+  Input, 
+  Button, 
+  Popover, 
+  PopoverHeader, 
+  PopoverBody, 
+  Alert 
+} from 'reactstrap';
+import { 
+  connect, 
+  sendMessage, 
+  getMessagesOfUser, 
+  getWorkSpaceMessagesFromServer, 
+  sendDirectMessage, 
+  getPrivateChannelMessagesFromServer, 
+  sendTypeStatus 
+} from '../socketHelpers';
 import NavBar from './NavBar.jsx';
-import MessageList from './MessageList.jsx';
 import Body from './Body.jsx';
 import Dropzone from 'react-dropzone';
 import upload from 'superagent';
