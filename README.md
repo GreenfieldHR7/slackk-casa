@@ -8,6 +8,10 @@
 * Austin Shin
 * Chase Lee
 * Shawn Ranck
+* Ofir Zisman
+* Emma Liu
+* Jimmy Tran
+* Sam Martin
 
 ## Table of Contents
 
@@ -21,7 +25,7 @@
 
 ## Demo
 
-Try it here: [slackk-casa](https://slackk-casa.herokuapp.com)
+Try it here: [slackk-casa](https://slackk.herokuapp.com/)
 
 ## Usage
 
@@ -49,7 +53,7 @@ npm install
 
 ### Roadmap
 
-View the project roadmap [here](https://trello.com/slackk)
+View the project roadmap [here](https://trello.com/b/C8iO27vD/taut) and [here](https://trello.com/slackk)
 
 ## Contributing
 

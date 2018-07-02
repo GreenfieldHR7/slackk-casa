@@ -1,8 +1,22 @@
 import React from 'react';
-import { connect, sendMessage, getMessagesOfUser, getWorkSpaceMessagesFromServer } from '../socketHelpers';
-import { Input, Button, Popover, PopoverHeader, PopoverBody, Alert } from 'reactstrap';
+import { 
+  Input, 
+  Button, 
+  Popover, 
+  PopoverHeader, 
+  PopoverBody, 
+  Alert 
+} from 'reactstrap';
+import { 
+  connect, 
+  sendMessage, 
+  getMessagesOfUser, 
+  getWorkSpaceMessagesFromServer, 
+  sendDirectMessage, 
+  getPrivateChannelMessagesFromServer, 
+  sendTypeStatus 
+} from '../socketHelpers';
 import NavBar from './NavBar.jsx';
-import MessageList from './MessageList.jsx';
 import Body from './Body.jsx';
 import Dropzone from 'react-dropzone';
 import upload from 'superagent';
@@ -23,19 +37,24 @@ export default class App extends React.Component {
           workspaceId: 0,
         },
       ],
+      waitingMessageInChannels: {},
+      currentUser: '',
       users: [],
       usernames: [],
       workSpaces: [],
+      privateChannels: [],
       query: '',
       currentWorkSpaceId: 0,
       currentWorkSpaceName: '',
-      selectedUser: 'All users', 
-      workspaceMentioned: [],
       poll: [],
       popoverOpen: false,
       typer: '',
       typerWorkSpaceId: '',
       renderTyping: false,
+      selectedUser: 'All users', // for selected messages by user filter
+      workspaceMentioned: [],
+      currentPrivateChannelId: '',
+      currentPrivateChannelName: '',
     };
     this.handleSelectedUser = this.handleSelectedUser.bind(this);
     this.getMessagesByKeywords = this.getMessagesByKeywords.bind(this);
@@ -48,6 +67,7 @@ export default class App extends React.Component {
     let server = location.origin.replace(/^http/, 'ws');
     // connect to the websocket server
     connect(server, this);
+    this.setState({ currentUser: this.props.location.state.username });
   }
 
   // changes the query state based on user input in text field
@@ -63,11 +83,19 @@ export default class App extends React.Component {
     // on key press enter send message and reset text box
     if (event.charCode === 13 && !event.shiftKey) {
       event.preventDefault();
-      sendMessage({
-        username: this.props.location.state.username,
-        text: this.state.query,
-        workspaceId: this.state.currentWorkSpaceId,
-      });
+      if (this.state.currentWorkSpaceId !== '') {
+        sendMessage({
+          username: this.props.location.state.username,
+          text: this.state.query,
+          workspaceId: this.state.currentWorkSpaceId,
+        });        
+      } else {
+        sendDirectMessage({
+          username: this.props.location.state.username,
+          text: this.state.query,
+          privateChannelId: this.state.currentPrivateChannelId
+        });             
+      } 
       // resets text box to blank string
       this.setState({
         query: '',
@@ -76,29 +104,77 @@ export default class App extends React.Component {
   }
 
   handleSelectedUser(event) {
-    let currentWorkSpaceId = this.state.currentWorkSpaceId;
-    // event.target.value is user when one was selected from option selection
-    // event is this.selectedUser when one changes input in search textbox   
-    let username = event ? event.target.value : this.state.selectedUser; 
-    if (username === "All users") {
-        getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+    // if it's private channel, show all messages when click on refresh (search)
+    if (this.state.currentPrivateChannelId !== '') {
+      getPrivateChannelMessagesFromServer(this.state.currentPrivateChannelId);
     } else {
-      getMessagesOfUser(username, currentWorkSpaceId);
-    } 
-    this.setState( { selectedUser: username } );      
+      let currentWorkSpaceId = this.state.currentWorkSpaceId;
+      // event.target.value is user when one was selected from option selection
+      // event is this.selectedUser when one changes input in search textbox   
+      let username = event ? event.target.value : this.state.selectedUser; 
+      if (username === "All users") {
+          getWorkSpaceMessagesFromServer(currentWorkSpaceId);     
+      } else {
+        getMessagesOfUser(username, currentWorkSpaceId);
+      } 
+      this.setState( { selectedUser: username } );           
+    }
   }
 
   //grabs all existing workspaces
   loadWorkSpaces() {
-    fetch('/workspaces')
+    fetch('/workspaces')  // fetches all workspaces. Returns response if succeed
+      .then(resp => resp.json())  // parses resp to a JSON. Returns workSpaces if succeed
+      .then(workSpaces => this.setState({ workSpaces }))  // finally, set State
+      .catch(console.error);
+  }
+
+  // if msg isn't undefined, receives message to client from other user
+  loadPrivateChannels(msg) {
+    fetch(`/privatechannels/${this.props.location.state.username}`)
       .then(resp => resp.json())
-      .then(workSpaces => this.setState({ workSpaces }))
+//      .then(privateChannels => this.setState({ privateChannels }))
+      .then(privateChannels => {
+        this.setState({ privateChannels })
+        if (msg) {
+          let privateChannels = this.state.privateChannels;
+            for (let i = 0; i < privateChannels.length; i++) {
+              if (privateChannels[i].id === msg.privateChannelId) {
+                if (msg.privateChannelId === this.state.currentPrivateChannelId) {
+                  // user got message at current private channel
+                  this.setState({ messages: [...this.state.messages, msg.message] });        
+                } else {
+                  // alert(`${msg.message.username} sent you a new message`);
+                  let waitingMessages = this.state.waitingMessageInChannels;
+                  waitingMessages[msg.privateChannelId] = waitingMessages[msg.privateChannelId] === undefined ? 1 : ++waitingMessages[msg.privateChannelId];
+                  this.setState({ waitingMessageInChannels: waitingMessages });
+                }
+              }
+            }         
+        }
+      })
       .catch(console.error);
   }
 
   //Helper function to reassign current workspace
   changeCurrentWorkSpace(id, name) {
-    this.setState({ currentWorkSpaceId: id, currentWorkSpaceName: name, selectedUser: 'All users' });
+    this.setState({ 
+      currentWorkSpaceId: id, 
+      currentWorkSpaceName: name,
+      currentPrivateChannelId: '',
+      currentPrivateChannelName: '',  
+      selectedUser: 'All users' 
+    });
+  }
+
+  //Helper function to reassign current private channel
+  changeCurrentPrivateChannel(id, otherUser) {
+    this.setState({ 
+      currentPrivateChannelId: id, 
+      currentPrivateChannelName: otherUser,
+      currentWorkSpaceId: '',
+      currentWorkSpaceName: ''
+    });
   }
 
   getMessagesByKeywords(query) {
@@ -144,11 +220,28 @@ export default class App extends React.Component {
 
   render() {
     let {
-      messages, usernames, query, workSpaces, currentWorkSpaceId, currentWorkSpaceName, selectedUser, workspaceMentioned, popoverOpen,
+      messages, 
+      usernames, 
+      query, 
+      workSpaces, 
+      currentWorkSpaceId, 
+      currentWorkSpaceName, 
+      selectedUser,
+      privateChannels,
+      currentPrivateChannelId,
+      currentPrivateChannelName,
+      currentUser,
+      workspaceMentioned,
+      popoverOpen,
+      waitingMessageInChannels
     } = this.state;
+  //  let currUser = this.props.location.state.username;
     return (
       <div className="app-container">
-        <NavBar currentWorkSpaceName={currentWorkSpaceName} />
+        <NavBar 
+          currentWorkSpaceName={currentWorkSpaceName}
+          currentPrivateChannelName={currentPrivateChannelName} 
+        />
         <Body
           usernames={usernames}
           messages={messages}
@@ -160,7 +253,13 @@ export default class App extends React.Component {
           getMessagesByKeywords={this.getMessagesByKeywords}
           selectedUser={selectedUser}
           workspaceMentioned={workspaceMentioned}
-          currentUser={this.props.location.state.username}
+          currentUser={currentUser}
+          loadPrivateChannels={() => this.loadPrivateChannels()}
+          privateChannels={privateChannels}
+          currentUser={currentUser}
+          changeCurrentPrivateChannel={(id, otherUser) => this.changeCurrentPrivateChannel(id, otherUser)}
+          currentPrivateChannelId={currentPrivateChannelId}
+          waitingMessageInChannels={waitingMessageInChannels}
         />
         <div className="input-box">
           <div className="typing-alert">
@@ -172,7 +271,7 @@ export default class App extends React.Component {
               className="message-input-box"
               type="textarea"
               name="text"
-              placeholder={`Message #${currentWorkSpaceName || 'select a workspace!'}`}
+              placeholder={`Message #${currentWorkSpaceName || 'select a workspace or or direct a message!'}`}
               onChange={event => this.handleChange(event)}
               onKeyPress={event => this.handleKeyPress(event)}
               onKeyDown={event => this.handleKeyDown(event)}

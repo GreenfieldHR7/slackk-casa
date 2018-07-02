@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
 import MessageList from './MessageList.jsx';
 import WorkSpaceList from './WorkSpaceList.jsx';
+import PrivateChannelList from './PrivateChannelList.jsx';
 import UserList from './UserList.jsx';
 import Search from './Search.jsx';
 import PropTypes from 'prop-types';
@@ -25,7 +26,12 @@ export default class Body extends React.Component {
       getMessagesByKeywords,
       selectedUser,
       workspaceMentioned,
-      currentUser,
+      privateChannels,
+      loadPrivateChannels,
+      currentUser, 
+      changeCurrentPrivateChannel,
+      currentPrivateChannelId, 
+      waitingMessageInChannels,   
     } = this.props;
 
     Notification.requestPermission().then(function(permission) {
@@ -39,14 +45,26 @@ export default class Body extends React.Component {
       <Container fluid>
        <Row>
           <Col className="side-bar-col" xs="2">
-            <WorkSpaceList
-              workSpaces={workSpaces}
-              loadWorkSpaces={loadWorkSpaces}
-              changeCurrentWorkSpace={changeCurrentWorkSpace}
-              currentWorkSpaceId={currentWorkSpaceId}
-              workspaceMentioned={workspaceMentioned}
-              currentUser={currentUser}
-            />
+            <Row>
+              <WorkSpaceList
+                workSpaces={workSpaces}
+                loadWorkSpaces={loadWorkSpaces}
+                changeCurrentWorkSpace={changeCurrentWorkSpace}
+                currentWorkSpaceId={currentWorkSpaceId}
+                workspaceMentioned={workspaceMentioned}
+                currentUser={currentUser}
+              />
+            </Row>
+            <Row>
+              <PrivateChannelList
+                privateChannels={privateChannels}
+                loadPrivateChannels={loadPrivateChannels}
+                currentUser={currentUser}
+                changeCurrentPrivateChannel={changeCurrentPrivateChannel}
+                currentPrivateChannelId={currentPrivateChannelId}
+                waitingMessageInChannels={waitingMessageInChannels}                
+              />
+            </Row>
           </Col>
           <Col className="message-list-col" xs="8">
           <div className="filter-messages">
@@ -54,6 +72,7 @@ export default class Body extends React.Component {
               usernames={usernames} 
               handleSelectedUser={handleSelectedUser}
               selectedUser={selectedUser}
+              currentWorkSpaceId={currentWorkSpaceId}
             />
             <Search 
               getMessagesByKeywords={getMessagesByKeywords}

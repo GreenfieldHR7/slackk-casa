@@ -84,11 +84,30 @@ const sendTypeStatus = (data) => {
   ws.send(JSON.stringify(msg));
 }
 
+const sendDirectMessage = (data) => {
+  const msg = {
+    method: 'POSTDIRECTMESSAGE',
+    data: {
+      username: data.username,
+      text: data.text,
+      privateChannelId: data.privateChannelId,
+    },
+  };
+  oneup.play();
+  sent = true;
+  ws.send(JSON.stringify(msg));
+}
+
 // takes a workspace Id as INT for parameter and returns the messages for that current workspace
 const getWorkSpaceMessagesFromServer = (id) => {
   const msg = { method: 'GETMESSAGES', data: { workspaceId: id } };
   ws.send(JSON.stringify(msg));
 };
+
+const getPrivateChannelMessagesFromServer = (id) => {
+  const msg = { method: 'GETDIRECTMESSAGES', data: { privateChannelId: id } };
+  ws.send(JSON.stringify(msg));
+}
 
 const getUsersInChannel = (id) => {
   const msg = { method: 'GETUSERSINCHANNEL', data: { workspaceId: id } };
@@ -143,28 +162,50 @@ const filterMsgByWorkSpace = (msg) => {
   }
 };
 
+const filterMsgByPrivateChannel = (msg) => {
+  if (sent) {
+    sent = false;
+  } else {
+    beep.play();
+  }
+
+  app.loadPrivateChannels(msg)  // sending message to new user which isn't in privateChannels state yet
+ 
+}
+
+
 // ws refers to websocket object
 const afterConnect = () => {
   ws.onmessage = (event) => {
     let serverResp = JSON.parse(event.data);
     // TODO: better error handling. Temp till complete switch statements
     if (serverResp.code === 400) {
+      console.log(serverResp)
       console.log(serverResp.method);
       throw serverResp.message;
     }
-
     switch (serverResp.method) {
       case 'GETMESSAGES':
         loadMessages(serverResp.data);
         break;
+      case 'GETDIRECTMESSAGES':
+        loadMessages(serverResp.data);
       case 'NEWMESSAGE':
         filterMsgByWorkSpace(serverResp.data);
         notifyUsersMentioned(serverResp.data);
+        break;
+      // new direct message from other user
+      case 'NEWDIRECTMESSAGE':
+        filterMsgByPrivateChannel(serverResp.data);
         break;
       case 'GETUSERS':
         setUsers(serverResp.data);
         break;
       case 'POSTMESSAGE':
+        addNewMessage(serverResp.data);        
+        break;
+      case 'POSTDIRECTMESSAGE':
+      console.log(serverResp);
         addNewMessage(serverResp.data);        
         break;
       case 'GETMESSAGESOFUSER':
@@ -199,10 +240,24 @@ const connect = (server, component) => {
     // gets workspaces after connection
     app.loadWorkSpaces();
 
+    // gets private channels after connection
+    app.loadPrivateChannels();
+
     // calls after connect function that takes in the socket session
     // and app component
     afterConnect();
   });
 };
 
-export { connect, sendMessage, afterConnect, getWorkSpaceMessagesFromServer, getMessagesOfUser, getUsersInChannel, updatePoll };
+export { 
+  connect, 
+  sendMessage, 
+  afterConnect, 
+  getWorkSpaceMessagesFromServer, 
+  getMessagesOfUser, 
+  getUsersInChannel,
+  getPrivateChannelMessagesFromServer,
+  updatePoll,
+  sendDirectMessage,
+  sendTypeStatus
+};

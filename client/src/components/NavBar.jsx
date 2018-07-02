@@ -37,7 +37,9 @@ export default class NavBar extends React.Component {
           <h1>slackk-casa</h1>
         </NavbarBrand>
         <h3 className="text-center">
-          #{this.props.currentWorkSpaceName || 'select a workspace!'}{' '}
+          #{this.props.currentWorkSpaceName || 
+            this.props.currentPrivateChannelName || 
+            'select a workspace!'}{' '}
         </h3>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>

@@ -42,7 +42,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.183.0",
+    "aws-sdk": "^2.185.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.0.0-beta.3",
@@ -60,7 +60,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-dropzone": "^4.2.5",
+    "react-dropzone": "^4.2.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
